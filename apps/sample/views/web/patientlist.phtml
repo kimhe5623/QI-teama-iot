@@ -1,0 +1,196 @@
+<?php require('common/head.php') ?>
+<?php require('common/bodynosession.php')?>
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h1 class="title">Patient List
+                                <p class="category">You can see only your patients</p></h1>
+                            </div>
+                            <div class="row">
+                                <div class="form-group" style="margin-left:10px;margin-top:10px">
+                                    <div class="col-sm-2" style="width:10%">
+                                        <select class="form-control" name="searchname" id="searchname">
+                                            <option value="name">Name</option>
+                                            <option value="phone">Phone</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2" style="margin-left: -20px;">
+                                        <input type="text" class="form-control" id="searchtext">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button type="button" class="btn" onclick="patientsearch()">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content table-responsive table-full-width">
+                                <table id="patientlist" class="table table-hover">
+                                    <thead>
+                                        <th>Email</th>
+                                    	<th>Last Name</th>
+                                    	<th>Frist Name</th>
+                                    	<th>Phone</th>
+                                    	<th>Gender</th>
+                                        <th>Birth</th>
+                                        <th>Connection</th>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    var count = <?echo count($data) ?> - 1;
+    $(function showtable() {
+        if(<?php echo isset($data)?>) {
+            var table = document.getElementById('patientlist');
+
+            <?
+            for($i=0;$i<count($data)-1;$i++) {
+                $email = $data[$i]['email']; $lname = $data[$i]['lname']; $fname = $data[$i]['fname']; $phone = $data[$i]['phone'];
+                $birth = $data[$i]['birth']; $gender = $data[$i]['gender']; $usn = $data[$i]['usn']; $requestingUSN = $data[$i]['requestingUSN'];
+                $requestedUSN = $data[$i]['requestedUSN']; $CONN_sate = $data[$i]['CONN_state'];
+                ?>
+                var objRow = table.insertRow();
+
+                var new_email = objRow.insertCell(), new_lname = objRow.insertCell(),new_fname = objRow.insertCell(), new_phone = objRow.insertCell(),
+                new_gender = objRow.insertCell(), new_birth = objRow.insertCell(), new_button = objRow.insertCell();
+
+                new_email.innerHTML = "<? echo $email; ?>";
+                new_lname.innerHTML = "<? echo $lname; ?>";
+                new_fname.innerHTML = "<? echo $fname; ?>";
+                new_phone.innerHTML = "<? echo $phone; ?>";
+
+                <?if($CONN_sate == 1) {?>
+
+                    <?if($gender==1) {?>
+                        new_gender.innerHTML = "Male";
+                    <?}
+                    else {?>
+                        new_gender.innerHTML = "Female";
+                    <?}?>
+                    new_birth.innerHTML = "<? echo $birth; ?>";
+                    new_button.innerHTML = '<input type = "button" class="btn" value="view" onclick="Heartrate(document.getElementById(\'btn<?echo $i;?>\').value)"> ' +
+                        '<input type="hidden" id="btn<? echo $i;?>" value="<? echo $requestingUSN;?>">';
+                    <?}
+                else {?>
+                    <?if($requestedUSN == $_SESSION['dsn']) {?>
+                        new_button.innerHTML = '<input type = "button" class="btn" value="connecting" onclick="Connecting(document.getElementById(\'btn<?echo $i;?>\').value)"> ' +
+                            '<input type="hidden" id="btn<? echo $i;?>" value="<? echo $usn;?>">';
+                    <?}
+                    else if($requestingUSN == $_SESSION['dsn']) {?>
+                        new_button.innerHTML = '<input type = "button" value="Wating" class="btn">';
+                    <?}
+                }
+            }?>
+        }
+    });
+</script>
+<script>
+    function Heartrate(usn) {
+        var data = {
+            usn: usn
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/patientlist",
+            data: JSON.stringify(data),
+            success: function (response) {
+
+                var res = JSON.parse(response);
+
+                if (res['status'] == true) {
+                    window.location = '/heartrate';
+                }
+                else
+                    alert(res['message']);
+            }
+        });
+    }
+
+    function Connecting(usn) {
+        var data = {
+            usn: usn,
+            dsn: "<? echo $_SESSION['dsn']; ?>"
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/connectuser",
+            data: JSON.stringify(data),
+            success: function (response) {
+
+                var res = JSON.parse(response);
+
+                if (res['status'] == true) {
+                    window.location = '/patientlist';
+                }
+                else
+                    alert(res['message']);
+            }
+        });
+    }
+</script>
+<script>
+    function patientsearch() {
+        var target = document.getElementById('searchname');
+        var data = {
+            type: target.options[target.selectedIndex].text,
+            value: document.getElementById('searchtext').value
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/patientsearch",
+            data: JSON.stringify(data),
+            success: function (response) {
+
+                var res = JSON.parse(response);
+
+                if (res['status'] == true) {
+                    //alert(res.data[0].fname);
+                    var table = document.getElementById('patientlist');
+                    for(var i=0;i<count;i++) {
+                        table.deleteRow(1);
+                    }
+                    for(var i=0;i<res.data.length;i++) {
+                        var new_email = objRow.insertCell(), new_lname = objRow.insertCell(),new_fname = objRow.insertCell(), new_phone = objRow.insertCell(),
+                            new_gender = objRow.insertCell(), new_birth = objRow.insertCell(), new_button = objRow.insertCell();
+
+                        new_email.innerHTML = res.data[i].email;
+                        new_lname.innerHTML = res.data[i].lname;
+                        new_fname.innerHTML = res.data[i].fname;
+                        new_phone.innerHTML = res.data[i].phone;
+                        new_button.innerHTML = '<input type = "button" value="Connection" class="btn">';
+                    }
+                }
+                else
+                    alert(res['message']);
+            }
+        });
+    }
+</script>
+
+
+</body>
+
+<!--   Core JS Files   -->
+<script src="assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<script src="assets/js/demo.js"></script>
+</html>

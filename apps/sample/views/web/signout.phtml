@@ -1,0 +1,34 @@
+<?php
+session_start();
+session_destroy();
+?>
+<html>
+<heamd>
+    <body>
+    </body>
+</heamd>
+</html>
+<script>
+    /*function signout() {
+        var data = {
+            status : "sign-out"
+        }
+        $.ajax({
+            type: "POST",
+            url: "/signout",
+            data: JSON.stringify(data),
+
+            success: function (response) {
+
+                var res = JSON.parse(response);
+
+                if (res['status'] == true) {
+                    window.location = '/';
+                }
+                else
+                    alert(res['message']);
+            }
+        });
+    }*/
+    window.location='/';
+</script>

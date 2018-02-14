@@ -1,0 +1,229 @@
+<?php require('common/head.php') ?>
+<?php require('common/body.php')?>
+
+        <div class="content" style="margin-top:-40px">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="card">
+                        <div class="row" style="margin-left: 40px;margin-top: 40px;">
+                            <div class="header">
+                                <h1 class="title">AQI Data</h1>
+                            </div>
+                            <div>
+                                <div class="form-group">
+                                    <div class="col-sm-2">
+                                        <input type="date" id="fdate" class="form-control" maxlength="10">
+                                    </div>
+                                    <div class="col-sm-1" style="width:40px;margin-top:5px">~</div>
+                                    <div class="col-sm-2">
+                                        <input type="date" id="ldate" class="form-control" maxlength="10">
+                                    </div>
+                                    <div class="col-sm-2" style="padding-top: 4px;">
+                                        <input type="button" id="rrsearch" value="search" onclick="generateChartData()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="chartdiv" style="width: 100%; height: 500px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+    <!--   Core JS Files   -->
+    <script src="assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+	<!--  Charts Plugin -->
+	<script src="assets/js/chartist.min.js"></script>
+
+    <!--  Notifications Plugin    -->
+    <script src="assets/js/bootstrap-notify.js"></script>
+
+    <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+	<script src="assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+	<script src="assets/js/demo.js"></script>
+
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+        var chartData = [];
+        var arr;
+        var count;
+        function generateChartData() {
+            var date = {
+                fdate : $("#fdate").val(),
+                ldate : $("#ldate").val()
+            };
+            $.ajax({
+                type: "POST",
+                url: "/aqi",
+                data: JSON.stringify(date),
+
+                success: function (response) {
+
+                    var res = JSON.parse(response);
+
+                    if (res['status'] == true) {
+                        arr = res['data'];
+                        count = arr.length;
+
+                        for (var i = 0; i < count; i++) {
+                            var ts = arr[i]['TS'].split(" ");
+                            var ymd = ts[0].split("-");
+                            var hm = ts[1].split(":");
+                            var middle = ymd[1] - 1;
+                            var pm25 = Math.round(arr[i]['PM2.5']);
+                            var o3 = Math.round(arr[i]['O3']);
+                            var no2 = Math.round(arr[i]['NO2']);
+                            var co = Math.round(arr[i]['CO']);
+                            var so2 = Math.round(arr[i]['SO2']);
+                            var tem = Math.round(arr[i]['Temperature']);
+
+                            var newDate = new Date(ymd[0], middle, ymd[2], hm[0], hm[1]);
+
+                            chartData.push({
+                                date: newDate,
+                                pm25: pm25,
+                                o3: o3,
+                                no2: no2,
+                                co: co,
+                                so2: so2,
+                                tem: tem
+                            });
+                        }
+
+                        var chart = AmCharts.makeChart("chartdiv", {
+                            type: "serial",
+                            legend: {
+                                equalWidths: false,
+                                useGraphSettings: true,
+                                valueAlign: "left",
+                                valueWidth: 120
+                            },
+                            dataProvider: chartData,
+                            dataDateFormat: "YY-MM-DD JJ:NN",
+                            categoryField: "date",
+                            categoryAxis: {
+                                minPeriod: "mm",
+                                parseDates: true,
+                                gridAlpha: 0.15,
+                                minorGridEnabled: true,
+                                axisColor: "#DADADA"
+                            },
+                            valueAxes: [{
+                                axisAlpha: 0.2,
+                                id: "v1"
+                            },{
+                                axisAlpha: 0.2,
+                                offset: 50,
+                                id: "v2"
+                            }],
+                            graphs: [{
+                                title: "PM2.5",
+                                id: "g1",
+                                valueAxis: "v1",
+                                valueField: "pm25",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 2,
+                                lineColor: "#b5030d",
+                                negativeLineColor: "#0352b5",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>PM2.5: [[value]]</span></b>"
+                            },{
+                                title: "O3",
+                                id: "g2",
+                                valueAxis: "v1",
+                                valueField: "o3",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 2,
+                                lineColor: "#0352b5",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>O3: [[value]]</span></b>"
+                            },{
+                                title: "NO2",
+                                id: "g3",
+                                valueAxis: "v1",
+                                valueField: "no2",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 2,
+                                lineColor: "#b57300",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>NO2: [[value]]</span></b>"
+                            },{
+                                title: "CO",
+                                id: "g4",
+                                valueAxis: "v1",
+                                valueField: "co",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 2,
+                                lineColor: "#b5b42b",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>CO: [[value]]</span></b>"
+                            },{
+                                title: "SO2",
+                                id: "g5",
+                                valueAxis: "v1",
+                                valueField: "so2",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 2,
+                                lineColor: "#2cb500",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>SO2: [[value]]</span></b>"
+                            },{
+                                title: "Temperature",
+                                id: "g6",
+                                valueAxis: "v2",
+                                valueField: "tem",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 2,
+                                lineColor: "#b50088",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>Temperature: [[value]]</span></b>"
+                            }],
+                            chartCursor: {
+                                fullWidth: true,
+                                categoryBalloonDateFormat: "YY-MM-DD JJ:NN",
+                                valueLineBalloonEnabled: true,
+                                cursorAlpha: 0.1
+                            },
+                            chartScrollbar: {
+                                scrollbarHeight: 40,
+                                color: "#FFFFFF",
+                                autoGridCount: true,
+                                graph: "g1"
+                            },
+
+                            mouseWheelZoomEnabled: true
+                        });
+
+                        chart.addListener("dataUpdated", zoomChart);
+
+                        function zoomChart() {
+                            // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
+                            chart.zoomToIndexes(chartData.length - 40, chartData.length - 1);
+                        }
+                    }
+                }
+            });
+        }
+
+    </script>
+</html>

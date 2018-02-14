@@ -1,0 +1,154 @@
+<?php require('common/head.php') ?>
+<?php require('common/bodynosession.php')?>
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="title">Profile</h4>
+                        </div>
+                        <div class="content">
+                            <form id="profile-form" class="form-group">
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label>Email address</label>
+                                            <input type="text" id="getemail" class="form-control" value="<?php if(isset($data['email'])){ echo $data['email']; }?>"placeholder="Email" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label>First Name</label>
+                                            <input type="text" id="getfname" class="form-control" value="<?php if(isset($data['fname'])){ echo $data['fname']; }?>" placeholder="First Name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label>Last Name</label>
+                                            <input type="text" id="getlname" class="form-control" value="<?php if(isset($data['lname'])){ echo $data['lname']; }?>" placeholder="Last Name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <label>Gender</label>
+                                        <div class="form-group" name="radio_name" style="margin:10px">
+                                            <div class="radio-inline">
+                                                <label>
+                                                    <input type="radio" name="getgender" value="1" <?php if($data['gender']==1) { echo "checked"; }?> disabled>Male</label>
+                                            </div>
+                                            <div class="radio-inline">
+                                                <label>
+                                                    <input type="radio" name="getgender" value="0" <?php if($data['gender']==0) { echo "checked"; }?> disabled>Female</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label>Birth</label>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" id="getbirth" class="form-control pull-right" value="<?php if(isset($data['birth'])){ echo $data['birth']; }?>" maxlength="10">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-lg-10">Phone</label>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                            <input type="text" id="getfnum" class="form-control" maxlength="3">
+                                        </div>
+                                        <div class="col-sm-1" style="padding:10px;margin-right:-10px" > -</div>
+                                        <div class="col-md-3">
+                                            <input type="text" id="getmnum" class="form-control" maxlength="4">
+                                        </div>
+                                        <div class="col-sm-1" style="padding:10px;margin-right:-10px"> -</div>
+                                        <div class="col-md-3">
+                                            <input type="text" id="getlnum" class="form-control" maxlength="4">
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    <?php
+                                        $phone = explode('-',$data['phone']);
+                                        if (isset($phone)) { ?>
+                                            document.getElementById('getfnum').value = '<?php echo $phone[0] ?>';
+                                            document.getElementById('getmnum').value = '<?php echo $phone[1] ?>';
+                                            document.getElementById('getlnum').value = '<?php echo $phone[2] ?>';
+                                        <?php } ?>
+                                </script>
+
+                                <button type="submit" class="btn btn-info btn-fill pull-left">SUBMIT</button>
+                                <div class="clearfix"></div>
+
+                                <script type="text/javascript">
+                                    $("#profile-form").submit(function(){
+                                        var arr = [$("#getfnum").val(),$("#getmnum").val(),$("#getlnum").val()];
+                                        var phone =  arr.join("-");
+
+                                        var data = {
+                                            birth : $("#getbirth").val(),
+                                            fname : $("#getfname").val(),
+                                            lname : $("#getlname").val(),
+                                            phone : phone
+                                        };
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/profile",
+                                            data: JSON.stringify(data),
+
+                                            success: function (response) {
+
+                                                var res = JSON.parse(response);
+
+                                                if (res['status'] == true) {
+                                                    window.location = '/';
+                                                    alert(res['message']);
+                                                }
+                                                else
+                                                    alert(res['message']);
+                                            }
+                                        });
+
+                                        return false;
+
+                                    });
+                                </script>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#getbirth").datepicker({
+            dateFormat:"yy-mm-dd",
+            changeMonth : true,
+            changeYear : true,
+            yearRange: "1910:2000",
+            defaultDate: "1910-01-01"
+        })
+    });
+</script>
+
+
+</body>
+</html>
