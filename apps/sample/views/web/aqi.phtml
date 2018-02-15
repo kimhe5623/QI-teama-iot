@@ -253,6 +253,7 @@
         var arr;
         var count;
         var markerArray = [];
+        var circles = [];
         var markers = [];
         function generateChartData() {
             var chartData = [];
@@ -419,13 +420,13 @@
                             // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
                             chart.zoomToIndexes(chartData.length - 40, chartData.length - 1);
                         }
-                        /*initMap();
-                        google.maps.event.addDomListener(window, 'load', initMap);*/
+                        initMap();
+                        google.maps.event.addDomListener(window, 'load', initMap);
                     }
                 }
             });
         }
-        /*
+
         var iterator = 0;
 
         function initMap() {
@@ -436,17 +437,17 @@
                 center : new google.maps.LatLng(arr[count-1]['LAT'],arr[count-1]['LNG'])
             };
 
-            map = new google.maps.Map(document.getElementById('map'),mapOptions);
+            var map = new google.maps.Map(document.getElementById('map'),mapOptions);
 
             for(var i=0;i<count;i++) {
                 markerArray[i] = new google.maps.LatLng(arr[i]['LAT'],arr[i]['LNG']);
-                addMarker();
+                addMarker(map);
             }
             var markerCluster = new MarkerClusterer(map, markers,
                 {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
         }
 
-        function addMarker() {
+        function addMarker(map) {
             var pm25 = Math.round(arr[iterator]['PM2.5']);
             var o3 = Math.round(arr[iterator]['O3']);
             var no2 = Math.round(arr[iterator]['NO2']);
@@ -454,7 +455,7 @@
             var so2 = Math.round(arr[iterator]['SO2']);
             var tem = Math.round(arr[iterator]['Temperature']);
 
-            var str = arr[iterator]['TS'] +" PM2.5 : " + pm25 + ", O3 : " + o3 + ", NO2 : " + no2 + ", CO : " + co + ", SO2 : " + so2 + ", Tem : " + tem;
+            var str = arr[iterator]['TS'] + " PM2.5 : " + pm25 + ", O3 : " + o3 + ", NO2 : " + no2 + ", CO : " + co + ", SO2 : " + so2 + ", Tem : " + tem;
 
             var marker = new google.maps.Marker({
                 title: str,
@@ -462,6 +463,20 @@
                 map: map,
                 draggable: false
             });
+
+            var Circle = new google.maps.Circle({
+                strokeColor: '#CCCCCC',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: '#0000FF',
+                fillOpacity: 0.2,
+                map: map,
+                center: markerArray[iterator],
+                radius: 300
+            });
+            Circle.setMap(map);
+            
+            circles.push(Circle);
             markers.push(marker);
 
             var infowindow = new google.maps.InfoWindow({
@@ -477,15 +492,17 @@
         function deleteMarkers() {
             for(var i=0;i<markers.length;i++) {
                 markers[i].setMap(null);
+                circles[i].setMap(null);
             }
             markers = [];
+            circles = [];
             markerArray= [];
-        }*/
+        }
 
 
     </script>
 
-<!--<script>
+<script>
     $().ready(function(){
         // Create a map object and specify the DOM element for display.
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -493,5 +510,5 @@
             zoom: 8
         });
     });
-</script>-->
+</script>
 </html>

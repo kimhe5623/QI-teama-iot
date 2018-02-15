@@ -66,7 +66,7 @@ class DataModel extends Model
 
     public function searchAQIdata($usn, $fdate, $ldate) {
 
-        $sql = "SELECT TS, CO, SO2, NO2, O3, `PM2.5`, Temperature from AQI_HISTORY where TS >= ? and TS <= ? and SSN = ? order by TS";
+        $sql = "SELECT TS, CO, SO2, NO2, O3, `PM2.5`, Temperature, LAT, LNG from AQI_HISTORY where TS >= ? and TS <= ? and SSN = ? order by TS";
 
         $fdate.=' 00:00:00';
         $ldate.=' 24:00:00';

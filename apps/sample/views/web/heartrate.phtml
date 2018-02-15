@@ -383,7 +383,7 @@
                 center : new google.maps.LatLng(arr[count-1]['LAT'],arr[count-1]['LNG'])
             };
 
-            map = new google.maps.Map(document.getElementById('map'),mapOptions);
+            var map = new google.maps.Map(document.getElementById('map'),mapOptions);
 
             for(var i=0;i<count;i++) {
                 markerArray[i] = new google.maps.LatLng(arr[i]['LAT'],arr[i]['LNG']);
