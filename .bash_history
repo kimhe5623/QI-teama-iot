@@ -381,3 +381,52 @@ cd sample/
 ls
 cd routers
 ls
+ls
+cd apps
+ls
+cd sample
+ls
+cd routers
+ls
+cd ..
+cd ~
+ls
+git status
+git add -A
+git commit -m "second commit"
+ls
+git status
+git remote -v
+git push origin ella
+git push ella master
+ls
+cd apps
+ls
+cd sample/
+ls
+cd ..
+cd ..
+ls
+git push ella master
+git add -A
+git status
+git commit -m "third"
+git status
+git push ella master
+ls
+cd apps
+ls
+cd sample/routers/
+ls
+vi v1.get.router.php 
+git commit -m "fourth"
+git add -A
+git add -A
+cd ..
+cd ..
+cd ..
+git add -a
+git add -A
+git commit -m "fourth"
+git push origin master
+mysql -r -p

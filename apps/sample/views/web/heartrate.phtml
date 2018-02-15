@@ -395,8 +395,9 @@
 
         function addMarker() {
             var heart = Math.round(arr[iterator]['Heart_rate']);
+            var rr = Math.round(arr[iterator]['RR_rate']);
 
-            var str = arr[iterator]['TS'] +" Heart Rate : " + heart;
+            var str = arr[iterator]['TS'] + " Heart Rate : " + heart + " RR Interval  : " + rr;
 
 
             if(heart>50 && heart<110) {
@@ -424,8 +425,17 @@
 
             markers.push(marker);
 
+            var contentString = '<div id="content">'+
+                '<h2 id="firstHeading" class="firstHeading">Heart Data</h2>'+
+                '<div id="bodyContent">'+
+                '<p>Date : ' + arr[iterator]['TS'] +
+                '<br>Heart Rate : ' + heart +
+                ' bpm<br>RR Interval : ' + rr + ' ms</p>' +
+                '</div>'+
+                '</div>';
+
             var infowindow = new google.maps.InfoWindow({
-                content: str
+                content: contentString
             });
 
             google.maps.event.addListener(marker, 'click', function() {

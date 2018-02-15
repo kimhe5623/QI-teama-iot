@@ -139,4 +139,20 @@ class DataController extends Controller
 
         echo json_encode(array('status' => true, 'message' => 'Fail'));
     }
+
+    public function actionAQIDataSearchApp()
+    {
+        $usn = $_POST['usn'];
+        $fdate = $_POST['fdate'];
+        $ldate = $_POST['ldate'];
+
+        $data = (new DataModel())->searchAQIdata($usn, $fdate, $ldate);
+
+        if($data) {
+            echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
+            return;
+        }
+
+        echo json_encode(array('status' => true, 'message' => 'Fail'));
+    }
 }

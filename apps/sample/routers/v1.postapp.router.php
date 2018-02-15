@@ -22,6 +22,9 @@ $app->post('/profileapp', 'Sample\Controller\UserAppController:actionProfileupda
 
 $app->post('/fpwdchangeapp', 'Sample\Controller\UserAppController:actionFpwdchangeApp');
 
+$app->post('/aqiapp', 'Sample\Controller\DataController:actionAQIDataSearchApp')
+    ->name('load-aqidataapp');
+
 $app->group('/v1', function () use ($app) {
     // get programmers list, GET /v1/programmers
     $app->get('/programmers', 'Sample\Controller\ProgrammerController:actionGetProgrammers')
