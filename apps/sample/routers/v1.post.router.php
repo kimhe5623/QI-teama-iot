@@ -51,8 +51,11 @@ $app->post('/patientlist', 'Sample\Controller\UserController:actionUsnsession')
 $app->post('/heartrate', 'Sample\Controller\DataController:actionHeartrateSearch')
     ->name('load-heartdata');
 
-$app->post('/rrrate', 'Sample\Controller\DataController:actionRRrateSearch')
-    ->name('load-rrdata');
+$app->post('/realtimehr', 'Sample\Controller\DataController:actionRealhrSearch')
+    ->name('load-realtimehrdata');
+
+/*$app->post('/rrrate', 'Sample\Controller\DataController:actionRRrateSearch')
+    ->name('load-rrdata');*/
 
 $app->post('/aqi', 'Sample\Controller\DataController:actionAQIDataSearch')
     ->name('load-aqidata');

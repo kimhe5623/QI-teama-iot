@@ -155,4 +155,19 @@ class DataController extends Controller
 
         echo json_encode(array('status' => true, 'message' => 'Fail'));
     }
+
+    public function actionRealhrSearch()
+    {
+        $bodyData = json_decode($this->getApp()->request->getBody());
+        $usn=$_SESSION['usn'];
+        $data = (new DataModel())->searchRealhrdata($usn);
+
+        if($data) {
+            echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
+            return;
+        }
+
+        echo json_encode(array('status' => true, 'message' => 'Fail'));
+    }
+
 }

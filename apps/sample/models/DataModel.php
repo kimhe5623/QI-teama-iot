@@ -51,6 +51,16 @@ class DataModel extends Model
         return $sth->fetchAll();
     }
 
+    public function searchRealhrdata($usn) {
+
+        $sql = "SELECT TS, Heart_rate, RR_rate, LAT, LNG from HEART_HISTORY where USN = ? order by TS desc limit 10";
+
+        $sth = $this->getReadConnection()->prepare($sql);
+        $sth->execute(array(intval($usn)));
+
+        return $sth->fetchAll();
+    }
+
     public function searchRRdata($usn, $fdate, $ldate) {
 
         $sql = "SELECT TS, RR_rate from HEART_HISTORY where TS >= ? and TS <= ? and USN = ? order by TS";

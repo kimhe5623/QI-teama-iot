@@ -250,11 +250,131 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script src="https://maps.googleapis.com/maps/api/js"></script>
 
+
     <script>
         var arr;
         var count;
         var markerArray = [];
         var markers = [];
+        $().ready(function(){
+            // Create a map object and specify the DOM element for display.
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 32.8793991, lng: -117.2368268},
+                zoom: 8
+            });
+
+            var chartData = [];
+            $.ajax({
+                type: "POST",
+                url: "/realtimehr",
+
+                success: function (response) {
+
+                    var res = JSON.parse(response);
+
+                    if (res['status'] == true) {
+                        arr = res['data'];
+                        count = arr.length;
+
+                        for(var i = 0; i < count; i++) {
+                            var ts = arr[i]['TS'].split(" ");
+                            var ymd = ts[0].split("-");
+                            var hm = ts[1].split(":");
+                            var middle = ymd[1]-1;
+                            var heart = arr[i]['Heart_rate'];
+                            var rr = arr[i]['RR_rate'];
+
+                            var newDate = new Date(ymd[0], middle, ymd[2] , hm[0], hm[1], hm[2]);
+                            var visits = Math.round(heart);
+                            var hits = Math.round(rr);
+
+                            chartData.push({
+                                date: newDate,
+                                visits: visits,
+                                hits: hits
+                            });
+                        }
+
+                        var chart = AmCharts.makeChart("chartdiv", {
+                            type: "serial",
+                            legend: {
+                                equalWidths: false,
+                                useGraphSettings: true,
+                                valueAlign: "left",
+                                valueWidth: 120
+                            },
+                            dataProvider: chartData,
+                            dataDateFormat: "YY-MM-DD JJ:NN:SS",
+                            categoryField: "date",
+                            categoryAxis: {
+                                minPeriod: "mm",
+                                parseDates: true,
+                                gridAlpha: 0.15,
+                                minorGridEnabled: true,
+                                axisColor: "#DADADA"
+                            },
+                            valueAxes: [{
+                                axisAlpha: 0.2,
+                                id: "v1"
+                            }, {
+                                axisAlpha: 0.2,
+                                offset: 50,
+                                id: "v2"
+                            }],
+                            graphs: [{
+                                title: "Heart-rate",
+                                id: "g1",
+                                valueAxis: "v1",
+                                valueField: "visits",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 2,
+                                lineColor: "#b5030d",
+                                negativeLineColor: "#0352b5",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>Heart-rate: [[value]]</span></b>"
+                            },{
+                                title: "RR-interval",
+                                id: "g2",
+                                valueAxis: "v2",
+                                valueField: "hits",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 2,
+                                lineColor: "#0352b5",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>RR-interval: [[value]]</span></b>"
+                            }],
+                            chartCursor: {
+                                fullWidth: true,
+                                categoryBalloonDateFormat: "YY-MM-DD JJ:NN",
+                                valueLineBalloonEnabled: true,
+                                cursorAlpha: 0.1
+                            },
+                            chartScrollbar: {
+                                scrollbarHeight: 40,
+                                color: "#FFFFFF",
+                                autoGridCount: true,
+                                graph: "g1"
+                            },
+
+                            mouseWheelZoomEnabled: true
+                        });
+
+                        chart.addListener("dataUpdated", zoomChart);
+
+                        function zoomChart() {
+                            // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
+                            chart.zoomToIndexes(chartData.length - 40, chartData.length - 1);
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
         function generateChartData() {
             var chartData = [];
             var date = {
@@ -453,15 +573,5 @@
         }
 
 
-    </script>
-
-    <script>
-        $().ready(function(){
-            // Create a map object and specify the DOM element for display.
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 32.8793991, lng: -117.2368268},
-                zoom: 8
-            });
-        });
     </script>
 </html>
