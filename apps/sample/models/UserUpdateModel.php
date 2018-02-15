@@ -69,4 +69,14 @@ class UserUpdateModel extends Model
 
         return $this->getReadConnection()->lastInsertId();
     }
+
+    public function updateConnectRequest($usn, $dsn) {
+
+        $sql = "INSERT into CONNECTION_U_and_D (requestingUSN, requestedUSN, Reg_date, CONN_State) VALUES (?, ?, ?, 0)";
+
+        $sth = $this->getReadConnection()->prepare($sql);
+        $sth->execute(array(intval($dsn),intval($usn),date("Y-m-d H:i:s")));
+
+        return $this->getReadConnection()->lastInsertId();
+    }
 }

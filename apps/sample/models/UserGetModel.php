@@ -77,7 +77,7 @@ class UserGetModel extends Model
 
     public function getPatientdata($dsn) {
 
-        $sql = "SELECT USN, U_email, U_Fname, U_Lname, U_Gender, U_Birth, U_Phone, requestingUSN, requestedUSN, CONN_state from CONN_and_req_info where DSN = ? order by CONN_state desc";
+        $sql = "SELECT USN, U_email, U_Fname, U_Lname, U_Gender, U_Birth, U_Phone, requestingUSN, requestedUSN, CONN_state from CONN_and_req_info where DSN = ? order by CONN_state and requestedUSN desc";
 
         $sth = $this->getReadConnection()->prepare($sql);
         $sth->execute(array(intval($dsn)));
@@ -105,22 +105,22 @@ class UserGetModel extends Model
         return $sth->fetchAll();
     }
 
-    public function getPatientdatabyname($fname) {
+    public function getPatientdatabyname($fname, $lname) {
 
-        $sql = "SELECT USN, User_email, Fname, Lname, Gender, Phone from USERS where Fname = ?";
+        $sql = "SELECT USN, User_email, Fname, Lname from USERS where Fname = ? and Lname = ? and Who = 0";
 
         $sth = $this->getReadConnection()->prepare($sql);
-        $sth->execute(array(strval($fname)));
+        $sth->execute(array(strval($fname), strval($lname)));
 
         return $sth->fetchAll();
     }
 
-    public function getPatientdatabyphone($phone) {
+    public function getPatientdatabyemail($email) {
 
-        $sql = "SELECT USN, User_email, Fname, Lname, Gender, Phone from USERS where Phone = ?";
+        $sql = "SELECT USN, User_email, Fname, Lname from USERS where User_email = ? and Who = 0";
 
         $sth = $this->getReadConnection()->prepare($sql);
-        $sth->execute(array(strval($phone)));
+        $sth->execute(array(strval($email)));
 
         return $sth->fetchAll();
     }

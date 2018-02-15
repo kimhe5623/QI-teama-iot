@@ -15,7 +15,7 @@
                                     <div class="col-sm-2" style="width:10%">
                                         <select class="form-control" name="searchname" id="searchname">
                                             <option value="name">Name</option>
-                                            <option value="phone">Phone</option>
+                                            <option value="email">Email</option>
                                         </select>
                                     </div>
                                     <div class="col-md-2" style="margin-left: -20px;">
@@ -158,20 +158,25 @@
                 var res = JSON.parse(response);
 
                 if (res['status'] == true) {
-                    //alert(res.data[0].fname);
                     var table = document.getElementById('patientlist');
+
                     for(var i=0;i<count;i++) {
                         table.deleteRow(1);
                     }
-                    for(var i=0;i<res.data.length;i++) {
+
+                    count = res.data.length;
+
+                    for(var i=0;i<count;i++) {
+                        var num = res.data[i].usn;
+                        var objRow = table.insertRow();
                         var new_email = objRow.insertCell(), new_lname = objRow.insertCell(),new_fname = objRow.insertCell(), new_phone = objRow.insertCell(),
                             new_gender = objRow.insertCell(), new_birth = objRow.insertCell(), new_button = objRow.insertCell();
 
                         new_email.innerHTML = res.data[i].email;
                         new_lname.innerHTML = res.data[i].lname;
                         new_fname.innerHTML = res.data[i].fname;
-                        new_phone.innerHTML = res.data[i].phone;
-                        new_button.innerHTML = '<input type = "button" value="Connection" class="btn">';
+                        new_button.innerHTML = '<input type = "button" value="Connection" class="btn" onclick="conrequest(document.getElementById(\'searchbtn' + i +'\').value)">' +
+                            '<input type="hidden" id="searchbtn' + i + '" value="' + res.data[i].usn + '">';
                     }
                 }
                 else
@@ -181,6 +186,74 @@
     }
 </script>
 
+<script>
+    function patientsearch() {
+        var target = document.getElementById('searchname');
+        var data = {
+            type: target.options[target.selectedIndex].text,
+            value: document.getElementById('searchtext').value
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/patientsearch",
+            data: JSON.stringify(data),
+            success: function (response) {
+
+                var res = JSON.parse(response);
+
+                if (res['status'] == true) {
+                    var table = document.getElementById('patientlist');
+
+                    for(var i=0;i<count;i++) {
+                        table.deleteRow(1);
+                    }
+
+                    count = res.data.length;
+
+                    for(var i=0;i<count;i++) {
+                        var num = res.data[i].usn;
+                        var objRow = table.insertRow();
+                        var new_email = objRow.insertCell(), new_lname = objRow.insertCell(),new_fname = objRow.insertCell(), new_phone = objRow.insertCell(),
+                            new_gender = objRow.insertCell(), new_birth = objRow.insertCell(), new_button = objRow.insertCell();
+
+                        new_email.innerHTML = res.data[i].email;
+                        new_lname.innerHTML = res.data[i].lname;
+                        new_fname.innerHTML = res.data[i].fname;
+                        new_button.innerHTML = '<input type = "button" value="Connection" class="btn" onclick="Conrequest(document.getElementById(\'searchbtn' + i +'\').value)">' +
+                            '<input type="hidden" id="searchbtn' + i + '" value="' + res.data[i].usn + '">';
+                    }
+                }
+                else
+                    alert(res['message']);
+            }
+        });
+    }
+</script>
+<script>
+    function Conrequest(usn) {
+        var data = {
+            usn: usn
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/conrequest",
+            data: JSON.stringify(data),
+            success: function (response) {
+
+                var res = JSON.parse(response);
+
+                if (res['status'] == true) {
+                    alert(res['message']);
+                    window.location = '/patientlist';
+                }
+                else
+                    alert(res['message']);
+            }
+        });
+    }
+</script>
 
 </body>
 

@@ -336,3 +336,39 @@ ls
 vi apps/sample/views/web/assets/css/style.css 
 mysql -r -p
 exit
+ls
+cd var/www/html
+ls
+ll
+ls -al
+git init
+git add -A
+git remote add origin https://github.com/kimhe5623/Chella.git
+git remote -v
+git push origin master
+git push origin master
+git push origin master
+git commit -m "server files push"
+git push origin master
+git push origin master
+git push --help
+mysql -r -p
+cd /var/www/html
+ls
+cd ../../..
+ls
+cd ~
+ls
+cd apps/sample/
+ls
+vi routers
+cd routers/
+ls
+cd ..
+cd ..
+cd ~
+ls
+git push origin master
+git remote add origin https://github.com/kimhe5623/Chella_server.git
+git remote add ella https://github.com/kimhe5623/Chella_server.git
+git push ella master

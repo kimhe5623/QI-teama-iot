@@ -345,25 +345,22 @@ class UserController extends Controller
         $bodyData = json_decode($this->getApp()->request->getBody());
 
         if($bodyData->type == "Name") {
-            $user = (new UserGetModel())->getPatientdatabyname($bodyData->value);
+            $name = explode(" ", $bodyData->value);
+            $user = (new UserGetModel())->getPatientdatabyname($name[0], $name[1]);
+        }
+        else if($bodyData->type == "Email") {
+            $user = (new UserGetModel())->getPatientdatabyemail($bodyData->value);
+        }
+
+        if($user){
+
             $count = count($user);
 
-            if($user){
-                for($i=0;$i<$count;$i++) {
-                    $data[$i] = array('email' => $user[$i]["User_email"], 'fname' => $user[$i]["Fname"],
-                        'lname' => $user[$i]["Lname"], 'phone' => $user[$i]["Phone"]);
-                }
-                echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
-                return;
+            for($i=0;$i<$count;$i++) {
+                $data[$i] = array('usn' => $user[$i]["USN"], 'email' => $user[$i]["User_email"], 'fname' => $user[$i]["Fname"], 'lname' => $user[$i]["Lname"]);
             }
-        }
-        else if($bodyData->type == "Phone") {
-            $user = (new UserGetModel())->getPatientdatabyphone($bodyData->value);
-
-            if($user){
-                echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
-                return;
-            }
+            echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
+            return;
         }
 
         echo json_encode(array('status' => true, 'message' => 'fail'));
@@ -375,6 +372,17 @@ class UserController extends Controller
         $bodyData = json_decode($this->getApp()->request->getBody());
 
         $user = (new UserUpdateModel())->updateConnect($bodyData->usn, $bodyData->dsn);
+
+        echo json_encode(array('status' => true, 'message' => 'Success'));
+    }
+
+    public function actionConrequest()
+    {
+        $bodyData = json_decode($this->getApp()->request->getBody());
+
+        $dsn = $_SESSION['dsn'];
+
+        $user = (new UserUpdateModel())->updateConnectRequest($bodyData->usn, $dsn);
 
         echo json_encode(array('status' => true, 'message' => 'Success'));
     }

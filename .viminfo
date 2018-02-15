@@ -10,6 +10,9 @@
 # Last Search Pattern:
 ~MSle0~/login-form
 
+# Last Substitute String:
+$
+
 # Command Line History (newest to oldest):
 :q
 :wq
@@ -34,22 +37,40 @@
 # Input Line History (newest to oldest):
 
 # Registers:
-""1	LINE	0
+""0	LINE	0
+	
+"1	LINE	0
+	" ============================================================================
+	" Netrw Directory Listing                                        (netrw v149)
+	"   /var/www/teama-iot/apps/sample/routers
+	"   Sorted by      name
+	"   Sort sequence: [\/]$,\<core\%(\.\d\+\)\=\>,\.h$,\.c$,\.cpp$,\~\=\*$,*,\.o$,\.obj$,\.info$,\.swp$,\.bak$,\~$
+	"   Quick Help: <F1>:help  -:go up dir  D:delete  R:rename  s:sort-by  x:exec
+	" ============================================================================
+	../
+	./
+	v1.default.router.php
+	v1.get.router.php
+	v1.post.router.php
+	v1.postapp.router.php
+	.swp
+"2	LINE	0
 	
 
 # File marks:
-'0  169  1  ~/apps/sample/views/web/assets/css/style.css
-'1  72  0  ~/public/sample/assets/css/style.css
-'2  1  0  ~/public/sample/assets/css/sytle.css
-'3  69  4  ~/public/sample/assets/css/style.css
-'4  11  65  ~/apps/sample/models/DataInsertModel.php
-'5  45  8  ~/apps/sample/controllers/DataController.php
-'6  85  0  ~/apps/sample/routers/v1.default.router.php
-'7  30  0  ~/apps/sample/models/DataInsertModel.php
-'8  50  0  ~/apps/sample/controllers/DataController.php
-'9  1  0  ~/apps/sample/models/DataInsertModel.php
+'0  1  1  ~/apps/sample/routers
+'1  169  1  ~/apps/sample/views/web/assets/css/style.css
+'2  72  0  ~/public/sample/assets/css/style.css
+'3  1  0  ~/public/sample/assets/css/sytle.css
+'4  69  4  ~/public/sample/assets/css/style.css
+'5  11  65  ~/apps/sample/models/DataInsertModel.php
+'6  45  8  ~/apps/sample/controllers/DataController.php
+'7  85  0  ~/apps/sample/routers/v1.default.router.php
+'8  30  0  ~/apps/sample/models/DataInsertModel.php
+'9  50  0  ~/apps/sample/controllers/DataController.php
 
 # Jumplist (newest first):
+-'  1  1  ~/apps/sample/routers
 -'  169  1  ~/apps/sample/views/web/assets/css/style.css
 -'  163  1  ~/apps/sample/views/web/assets/css/style.css
 -'  145  1  ~/apps/sample/views/web/assets/css/style.css
@@ -147,7 +168,6 @@
 -'  1  20  ~/hello.html
 -'  1  0  ~/hello
 -'  1  0  ~/hello
--'  4  5  ~/index.html
 
 # History of marks within files (newest to oldest):
 

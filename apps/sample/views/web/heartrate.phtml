@@ -206,7 +206,7 @@
                                         <input type="date" id="ldate" class="form-control" maxlength="10">
                                     </div>
                                     <div class="col-sm-2" style="padding-top: 4px;">
-                                        <input type="button" id="heartsearch" value="search" onclick="generateChartData()">
+                                        <input type="button" class="btn" id="heartsearch" value="search" onclick="generateChartData()">
                                     </div>
                                 </div>
                             </div>
@@ -257,6 +257,7 @@
         var markerArray = [];
         var markers = [];
         function generateChartData() {
+            var chartData = [];
             var date = {
                 fdate : $("#fdate").val(),
                 ldate : $("#ldate").val()
@@ -332,7 +333,7 @@
                                 negativeLineColor: "#0352b5",
                                 balloonText: "[[category]]<br><b><span style='font-size:14px;'>Heart-rate: [[value]]</span></b>"
                             },{
-                                title: "RR-rate",
+                                title: "RR-interval",
                                 id: "g2",
                                 valueAxis: "v2",
                                 valueField: "hits",
@@ -342,7 +343,7 @@
                                 lineThickness: 2,
                                 lineColor: "#0352b5",
                                 negativeLineColor: "#b5030d",
-                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>RR-rate: [[value]]</span></b>"
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>RR-interval: [[value]]</span></b>"
                             }],
                             chartCursor: {
                                 fullWidth: true,

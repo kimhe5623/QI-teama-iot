@@ -142,6 +142,9 @@ $app->post('/patientsearch', 'Sample\Controller\UserController:actionPatientsear
 $app->post('/connectuser', 'Sample\Controller\UserController:actionConnectuser')
     ->name('connect-patient');
 
+$app->post('/conrequest', 'Sample\Controller\UserController:actionConrequest')
+    ->name('connect-request');
+
 $app->group('/v1', function () use ($app) {
     // get programmers list, GET /v1/programmers
     $app->get('/programmers', 'Sample\Controller\ProgrammerController:actionGetProgrammers')

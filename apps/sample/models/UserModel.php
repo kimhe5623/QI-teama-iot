@@ -18,7 +18,8 @@ class UserModel extends Model
         //exit;
 
         $sth = $this->getReadConnection()->prepare($sql);
-        $sth->execute(array(strval($data->email), strval($hashed), strval($data->fname), strval($data->lname), intval($data->gender), strval($data->birth), strval($data->phone), intval(1)));
+        $sth->execute(array(strval($data->email), strval($hashed), strval($data->fname), strval($data->lname), intval($data->gender), strval($data->birth),
+            strval($data->phone),intval(1)));
 
         return $this->getReadConnection()->lastInsertId();
     }
@@ -35,7 +36,39 @@ class UserModel extends Model
         return $this->getReadConnection()->lastInsertId();
     }
 
-    public function getDoctorAccount($useremail) {
+    public function insertLicense($usn, $license) {
+
+        $sql = "INSERT into DOCTORS (LicenseNum, USERS_USN) VALUES (?, ?)";
+
+        $sth = $this->getReadConnection()->prepare($sql);
+        $sth->execute(array(strval($license), intval($usn)));
+
+        return $this->getReadConnection()->lastInsertId();
+    }
+
+    public function insertAQIData($aqidata) {
+
+        $sql = "INSERT into AQI_HISTORY (CO, SO2, NO2, O3, PM25, Temperature, SSN, TS, LAT, LNG) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $sth = $this->getReadConnection()->prepare($sql);
+        $sth->execute(array(floatval($aqidata->data->co), floatval($aqidata->data->so2), floatval($aqidata->data->no2), floatval($aqidata->data->o3), floatval($aqidata->data->pm2_5),
+            floatval($aqidata->data->temperature), intval($aqidata->ssn), strval($aqidata->timestamp), floatval($aqidata->location->lat), floatval($aqidata->location->lng) ));
+
+        return $this->getReadConnection()->lastInsertId();
+    }
+
+    public function insertHeartData($heartdata) {
+
+        $sql = "INSERT into HEART_HISTORY (Heart_rate, RR_rate, USN, TS, LAT, LNG) VALUES (?, ?, ?, ?, ?, ?)";
+
+        $sth = $this->getReadConnection()->prepare($sql);
+        $sth->execute(array(floatval($heartdata->data->Heart_rate), floatval($heartdata->data->RR_rate), intval($heartdata->usn), strval($heartdata->timestamp), floatval($heartdata->location->lat),
+            floatval($heartdata->location->lng)));
+
+        return $this->getReadConnection()->lastInsertId();
+    }
+
+    /*public function getDoctorAccount($useremail) {
 
         $sql = "SELECT USN, Hashed_PW FROM USERS WHERE User_email = ?";
 
@@ -158,28 +191,6 @@ class UserModel extends Model
         return $sth->fetchAll();
     }
 
-    public function insertAQIData($aqidata) {
-
-        $sql = "INSERT into AQI_HISTORY (CO, SO2, NO2, O3, PM25, Temperature, SSN, TS, LAT, LNG) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        $sth = $this->getReadConnection()->prepare($sql);
-        $sth->execute(array(floatval($aqidata->data->co), floatval($aqidata->data->so2), floatval($aqidata->data->no2), floatval($aqidata->data->o3), floatval($aqidata->data->pm2_5),
-            floatval($aqidata->data->temperature), intval($aqidata->ssn), strval($aqidata->timestamp), floatval($aqidata->location->lat), floatval($aqidata->location->lng) ));
-
-        return $this->getReadConnection()->lastInsertId();
-    }
-
-    public function insertHeartData($heartdata) {
-
-        $sql = "INSERT into HEART_HISTORY (Heart_rate, RR_rate, USN, TS, LAT, LNG) VALUES (?, ?, ?, ?, ?, ?)";
-
-        $sth = $this->getReadConnection()->prepare($sql);
-        $sth->execute(array(floatval($heartdata->data->Heart_rate), floatval($heartdata->data->RR_rate), intval($heartdata->usn), strval($heartdata->timestamp), floatval($heartdata->location->lat),
-            floatval($heartdata->location->lng)));
-
-        return $this->getReadConnection()->lastInsertId();
-    }
-
     public function getPatientdata($dsn) {
 
         $sql = "SELECT USN, U_email, U_Fname, U_Lname, U_Gender, U_Birth, U_Phone from COMPLETED_CONN where DSN = ?;";
@@ -188,6 +199,6 @@ class UserModel extends Model
         $sth->execute(array(intval($dsn)));
 
         return $sth->fetchAll();
-    }
+    }*/
 
 }
