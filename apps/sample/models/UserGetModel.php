@@ -125,4 +125,14 @@ class UserGetModel extends Model
         return $sth->fetchAll();
     }
 
+    public function chkLicense($license) {
+
+        $sql = "SELECT LicenseNUM from DOCTORS where LicenseNUM = ?";
+
+        $sth = $this->getReadConnection()->prepare($sql);
+        $sth->execute(array(strval($license)));
+
+        return $sth->fetchAll();
+    }
+
 }

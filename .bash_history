@@ -372,3 +372,12 @@ git push origin master
 git remote add origin https://github.com/kimhe5623/Chella_server.git
 git remote add ella https://github.com/kimhe5623/Chella_server.git
 git push ella master
+cd /var/www/teama
+cd /var/www/teama-iot
+ls -lt
+cd apps/
+ls
+cd sample/
+ls
+cd routers
+ls

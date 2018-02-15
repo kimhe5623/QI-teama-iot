@@ -21,21 +21,28 @@ class DoctorNPIverifyingController extends Controller
         $response = file_get_contents($url);
         $npiData = json_decode($response);
 
-
         $realLicense = $npiData->results[0]->taxonomies[0]->license;
         $realFname = $npiData->results[0]->basic->first_name;
         $realLname = $npiData->results[0]->basic->last_name;
 
         if(!strcmp(strtoupper($fname), $realFname) && !strcmp(strtoupper($lname), $realLname) && !strcmp($license, $realLicense)) {
-            $inputdoctor = (new UserModel())->insertDoctor($bodyData);
-            $usn = (new UserGetModel())->getDsn($bodyData->email);
-            $insertlicense = (new UserModel())->insertLicense($usn, $license);
+            $chklicense = (new UserGetModel())->chkLicense($license);
+            if(!$chklicense) {
+                $inputdoctor = (new UserModel())->insertDoctor($bodyData);
+                $usn = (new UserGetModel())->getDsn($bodyData->email);
+                $insertlicense = (new UserModel())->insertLicense($usn[0]["USN"], $license);
 
-            echo json_encode(array('status' => true, 'message' => 'Success'));
-            return;
+                echo json_encode(array('status' => true, 'message' => 'Success'));
+                return;
+            }
+            else {
+                echo json_encode(array('status' => true, 'message' => 'License already exists'));
+                return;
+            }
         }
         else {
-            echo "Incorrect License information";
+            echo json_encode(array('status' => true, 'message' => 'Incorrect License information'));
+            return;
         }
 
 

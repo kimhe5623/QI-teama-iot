@@ -36,6 +36,8 @@
                                     	<th>Gender</th>
                                         <th>Birth</th>
                                         <th>Connection</th>
+                                        <th>Heart</th>
+                                        <th>AQI</th>
                                     </thead>
                                 </table>
                             </div>
@@ -63,7 +65,7 @@
                 var objRow = table.insertRow();
 
                 var new_email = objRow.insertCell(), new_lname = objRow.insertCell(),new_fname = objRow.insertCell(), new_phone = objRow.insertCell(),
-                new_gender = objRow.insertCell(), new_birth = objRow.insertCell(), new_button = objRow.insertCell();
+                new_gender = objRow.insertCell(), new_birth = objRow.insertCell(), new_connection = objRow.insertCell() ,new_heartbutton = objRow.insertCell(), new_aqibutton = objRow.insertCell();
 
                 new_email.innerHTML = "<? echo $email; ?>";
                 new_lname.innerHTML = "<? echo $lname; ?>";
@@ -79,16 +81,19 @@
                         new_gender.innerHTML = "Female";
                     <?}?>
                     new_birth.innerHTML = "<? echo $birth; ?>";
-                    new_button.innerHTML = '<input type = "button" class="btn" value="view" onclick="Heartrate(document.getElementById(\'btn<?echo $i;?>\').value)"> ' +
-                        '<input type="hidden" id="btn<? echo $i;?>" value="<? echo $requestingUSN;?>">';
+                    new_connection.innerHTML = "Complete";
+                    new_heartbutton.innerHTML = '<input type = "button" class="btn" value="view" onclick="Heartrate(document.getElementById(\'heartbtn<?echo $i;?>\').value)"> ' +
+                        '<input type="hidden" id="heartbtn<? echo $i;?>" value="<? echo $requestingUSN;?>">';
+                    new_aqibutton.innerHTML = '<input type = "button" class="btn" value="view" onclick="Aqi(document.getElementById(\'aqibtn<?echo $i;?>\').value)"> ' +
+                        '<input type="hidden" id="aqibtn<? echo $i;?>" value="<? echo $requestingUSN;?>">';
                     <?}
                 else {?>
                     <?if($requestedUSN == $_SESSION['dsn']) {?>
-                        new_button.innerHTML = '<input type = "button" class="btn" value="connecting" onclick="Connecting(document.getElementById(\'btn<?echo $i;?>\').value)"> ' +
+                        new_connection.innerHTML = '<input type = "button" class="btn" value="connecting" onclick="Connecting(document.getElementById(\'btn<?echo $i;?>\').value)"> ' +
                             '<input type="hidden" id="btn<? echo $i;?>" value="<? echo $usn;?>">';
                     <?}
                     else if($requestingUSN == $_SESSION['dsn']) {?>
-                        new_button.innerHTML = '<input type = "button" value="Wating" class="btn">';
+                        new_connection.innerHTML = "Waiting";
                     <?}
                 }
             }?>
@@ -111,6 +116,28 @@
 
                 if (res['status'] == true) {
                     window.location = '/heartrate';
+                }
+                else
+                    alert(res['message']);
+            }
+        });
+    }
+
+    function Aqi(usn) {
+        var data = {
+            usn: usn
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/patientlist",
+            data: JSON.stringify(data),
+            success: function (response) {
+
+                var res = JSON.parse(response);
+
+                if (res['status'] == true) {
+                    window.location = '/aqi';
                 }
                 else
                     alert(res['message']);

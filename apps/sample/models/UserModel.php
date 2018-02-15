@@ -40,6 +40,7 @@ class UserModel extends Model
 
         $sql = "INSERT into DOCTORS (LicenseNum, USERS_USN) VALUES (?, ?)";
 
+
         $sth = $this->getReadConnection()->prepare($sql);
         $sth->execute(array(strval($license), intval($usn)));
 
@@ -60,7 +61,6 @@ class UserModel extends Model
     public function insertHeartData($heartdata) {
 
         $sql = "INSERT into HEART_HISTORY (Heart_rate, RR_rate, USN, TS, LAT, LNG) VALUES (?, ?, ?, ?, ?, ?)";
-
         $sth = $this->getReadConnection()->prepare($sql);
         $sth->execute(array(floatval($heartdata->data->Heart_rate), floatval($heartdata->data->RR_rate), intval($heartdata->usn), strval($heartdata->timestamp), floatval($heartdata->location->lat),
             floatval($heartdata->location->lng)));
