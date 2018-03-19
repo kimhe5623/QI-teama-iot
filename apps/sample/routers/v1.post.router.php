@@ -54,6 +54,9 @@ $app->post('/heartrate', 'Sample\Controller\DataController:actionHeartrateSearch
 $app->post('/realtimehr', 'Sample\Controller\DataController:actionRealhrSearch')
     ->name('load-realtimehrdata');
 
+$app->post('/realtimeaqi', 'Sample\Controller\DataController:actionRealaqiSearch')
+    ->name('load-realtimeaqidata');
+
 /*$app->post('/rrrate', 'Sample\Controller\DataController:actionRRrateSearch')
     ->name('load-rrdata');*/
 
@@ -71,6 +74,9 @@ $app->post('/connectuser', 'Sample\Controller\UserController:actionConnectuser')
 
 $app->post('/conrequest', 'Sample\Controller\UserController:actionConrequest')
     ->name('connect-request');
+
+$app->post('/disconnectuser', 'Sample\Controller\UserController:actionDisconnectuser')
+    ->name('disconnect-patient');
 
 $app->group('/v1', function () use ($app) {
     // get programmers list, GET /v1/programmers

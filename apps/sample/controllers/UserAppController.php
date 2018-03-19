@@ -23,7 +23,7 @@ class UserAppController extends Controller
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
         $birth = $_POST['birth'];
-        $gender = $_POST['gende r'];
+        $gender = $_POST['gender'];
         $phone = $_POST['phone'];
 
         $user = (new UserModel())->insertUser($email, $pwd, $fname, $lname, $birth, $gender, $phone);
@@ -84,9 +84,9 @@ class UserAppController extends Controller
             $mail->SMTPAuth = true;
             $mail->Username = "teamaiot2017@gmail.com";
             $mail->Password = "chosun2018";
-            $mail->setFrom('teamaiot2017@gmail.com', 'M');
-            $mail->addReplyTo('teamaiot2017@gmail.com', 'M');
-            $mail->addAddress($email, 'Test');
+            $mail->setFrom('teamaiot2017@gmail.com', 'My Doctor A');
+            $mail->addReplyTo('teamaiot2017@gmail.com', 'My Doctor A');
+            $mail->addAddress($email, 'My Doctor A');
             $mail->Subject = 'Verification Code';
             //$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
 
@@ -168,7 +168,7 @@ class UserAppController extends Controller
         $userpassword = $_POST['pwd'];
         $usn = $_POST['usn'];
 
-        $user = (new UserGetModel())->getPassword($usn, $userpassword);
+        $user = (new UserGetModel())->getPassword($usn);
 
         $truefalse = password_verify($userpassword, $user[0]['Hashed_PW']);
 
@@ -248,9 +248,9 @@ class UserAppController extends Controller
             $mail->SMTPAuth = true;
             $mail->Username = "teamaiot2017@gmail.com";
             $mail->Password = "chosun2018";
-            $mail->setFrom('teamaiot2017@gmail.com', 'M');
-            $mail->addReplyTo('teamaiot2017@gmail.com', 'M');
-            $mail->addAddress($email, 'Test');
+            $mail->setFrom('teamaiot2017@gmail.com', 'My Doctor A');
+            $mail->addReplyTo('teamaiot2017@gmail.com', 'My Doctor A');
+            $mail->addAddress($email, 'My Doctor A User');
             $mail->Subject = 'Verification Code';
             //$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
 
@@ -292,12 +292,196 @@ class UserAppController extends Controller
 
         $data = (new DataModel())->searchHeartdata($usn, $fdate, $ldate);
 
+        $this->getApp()->response->headers->set('Content-Type', 'application/json');
+        $this->getApp()->status(200);
+
         if($data) {
             echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
             return;
         }
 
         echo json_encode(array('status' => true, 'message' => 'Fail'));
+    }
+
+    public function actionUserListApp()
+    {
+        $usn = $_POST['usn'];
+
+        $user = (new UserGetModel())->getPatientdata($usn);
+
+        $count = count($user);
+
+        if($user) {
+            for($i=0;$i<$count;$i++) {
+                $data[$i] = array('email' => $user[$i]["U_email"], 'fname' => $user[$i]["U_Fname"],
+                    'lname' => $user[$i]["U_Lname"], 'birth' => $user[$i]["U_Birth"], 'gender' => $user[$i]["U_Gender"], 'phone' => $user[$i]["U_Phone"], 'usn' => $user[$i]["USN"],
+                    'requestingUSN' => $user[$i]["requestingUSN"], 'requestedUSN' => $user[$i]["requestedUSN"], 'CONN_state' => $user[$i]["CONN_state"]);
+            }
+            echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
+            return;
+        }
+
+        echo json_encode(array('status' => false, 'message' => 'There is no data'));
+        return;
+    }
+
+    public function actionDoctorListApp()
+    {
+        $usn = $_POST['usn'];
+
+        $user = (new UserGetModel())->getDoctordata($usn);
+
+        $count = count($user);
+
+        if($user) {
+            for($i=0;$i<$count;$i++) {
+                $data[$i] = array('email' => $user[$i]["D_email"], 'fname' => $user[$i]["D_Fname"],
+                    'lname' => $user[$i]["D_Lname"], 'birth' => $user[$i]["D_Birth"], 'gender' => $user[$i]["D_Gender"], 'phone' => $user[$i]["D_Phone"], 'usn' => $user[$i]["DSN"],
+                    'requestingUSN' => $user[$i]["requestingUSN"], 'requestedUSN' => $user[$i]["requestedUSN"], 'CONN_state' => $user[$i]["CONN_state"]);
+            }
+            echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
+            return;
+        }
+
+        echo json_encode(array('status' => false, 'message' => 'There is no data'));
+        return;
+    }
+
+    public function actionConnectbydoctorApp()
+    {
+        $dsn = $_POST['dsn'];
+        $usn = $_POST['usn'];
+
+        $user = (new UserUpdateModel())->updateConnect($usn, $dsn);
+
+        echo json_encode(array('status' => true, 'message' => 'Success'));
+    }
+
+    public function actionConnectbyuserApp()
+    {
+        $dsn = $_POST['dsn'];
+        $usn = $_POST['usn'];
+
+        $user = (new UserUpdateModel())->updateConnectbyUser($usn, $dsn);
+
+        echo json_encode(array('status' => true, 'message' => 'Success'));
+    }
+
+    public function actionConrequestApp()
+    {
+        $dsn = $_POST['dsn'];
+        $usn = $_POST['usn'];
+
+        $chk = (new UserGetModel())->chkConnection($usn, $dsn);
+
+        if(!$chk) {
+            $trufalse = (new UserUpdateModel())->updateConnectRequest($usn, $dsn);
+            if($trufalse) {
+                echo json_encode(array('status' => true, 'message' => 'Success'));
+                return;
+            }
+            echo json_encode(array('status' => false, 'message' => 'fail'));
+            return;
+        }
+        echo json_encode(array('status' => false, 'message' => 'Already Connected'));
+        return;
+    }
+
+    public function actionDisconnectuserApp()
+    {
+        $dsn = $_POST['dsn'];
+        $usn = $_POST['usn'];
+
+        $user = (new UserUpdateModel())->updateDisconnect($usn, $dsn);
+
+        echo json_encode(array('status' => true, 'message' => 'Success'));
+    }
+
+    public function actionConrequestbyuserApp()
+    {
+        $dsn = $_POST['dsn'];
+        $usn = $_POST['usn'];
+
+        $chk = (new UserGetModel())->chkConnection($usn, $dsn);
+
+        if(!$chk) {
+            $trufalse = (new UserUpdateModel())->updateConnectRequestbyuser($usn, $dsn);
+            if($trufalse) {
+                echo json_encode(array('status' => true, 'message' => 'Success'));
+                return;
+            }
+            echo json_encode(array('status' => false, 'message' => 'fail'));
+            return;
+        }
+        echo json_encode(array('status' => false, 'message' => 'Already Connected'));
+        return;
+    }
+
+    public function actionDoctorsearchApp()
+    {
+        $type = $_POST['type'];
+        $value = $_POST['value'];
+
+        if($type == "name") {
+            $name = explode(" ", $value);
+            $user = (new UserGetModel())->getDoctordatabyname($name[0], $name[1]);
+        }
+        else if($type == "email") {
+            $user = (new UserGetModel())->getDoctordatabyemail($value);
+        }
+
+        if($user){
+
+            $count = count($user);
+
+            for($i=0;$i<$count;$i++) {
+                $data[$i] = array('usn' => $user[$i]["USN"], 'email' => $user[$i]["User_email"], 'fname' => $user[$i]["Fname"], 'lname' => $user[$i]["Lname"],
+                'birth' => $user[$i]["Birth"], 'gender' => $user[$i]["Gender"]);
+            }
+            echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
+            return;
+        }
+
+        echo json_encode(array('status' => false, 'message' => 'fail'));
+        return;
+    }
+
+    public function actionPatientsearchApp()
+    {
+        $type = $_POST['type'];
+        $value = $_POST['value'];
+
+        if($type == "name") {
+            $name = explode(" ", $value);
+            $user = (new UserGetModel())->getPatientdatabyname($name[0], $name[1]);
+        }
+        else if($type == "email") {
+            $user = (new UserGetModel())->getPatientdatabyemail($value);
+        }
+
+        if($user){
+
+            $count = count($user);
+
+            for($i=0;$i<$count;$i++) {
+                $data[$i] = array('usn' => $user[$i]["USN"], 'email' => $user[$i]["User_email"], 'fname' => $user[$i]["Fname"], 'lname' => $user[$i]["Lname"],
+                    'birth' => $user[$i]["Birth"], 'gender' => $user[$i]["Gender"]);
+            }
+            echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
+            return;
+        }
+
+        echo json_encode(array('status' => false, 'message' => 'fail'));
+        return;
+    }
+
+    public function actionGetuserlistapp()
+    {
+        $who = $_POST['who'];
+
+        $data = (new UserGetModel())->getUserlist($who);
+
+        echo json_encode(array('status' => true, 'message' => 'Success', 'data' => $data));
     }
 
 }

@@ -42,20 +42,35 @@ $app->get('/fchangepwd', 'Sample\Controller\IndexController:actionFchangepwdPage
 $app->get('/chkemail', 'Sample\Controller\IndexController:actionCheckemailPage')
     ->name('check-email');
 
-$app->get('/heartrate', 'Sample\Controller\IndexController:actionHeartratePage')
+$app->get('/realtimeheartrate', 'Sample\Controller\IndexController:actionRealtimeHeartratePage')
     ->name('get-heartratepage');
 
-$app->get('/rrrate', 'Sample\Controller\IndexController:actionRRratePage')
+$app->get('/realtimeaqi', 'Sample\Controller\IndexController:actionRealtimeAQIDataPage')
     ->name('get-heartratepage');
 
-$app->get('/aqi', 'Sample\Controller\IndexController:actionAQIDataPage')
+$app->get('/historicalheartrate', 'Sample\Controller\IndexController:actionHistoricalHeartratePage')
     ->name('get-heartratepage');
 
-$app->get('/patientlist', 'Sample\Controller\UserController:actionPatientPage')
+$app->get('/historicalaqi', 'Sample\Controller\IndexController:actionHistoricalAQIDataPage')
+    ->name('get-heartratepage');
+
+$app->get('/realtime', 'Sample\Controller\UserController:actionRealtimePage')
+    ->name('get-patientpage');
+
+$app->get('/historical', 'Sample\Controller\UserController:actionHistoricalPage')
     ->name('get-patientpage');
 
 $app->get('/profile', 'Sample\Controller\UserController:actionProfilePage')
     ->name('get-profilepage');
+
+$app->get('/rthr', 'Sample\Controller\DataController:actionRealhrGet')
+    ->name('load-realtimehrdata');
+
+$app->get('/rtaqi', 'Sample\Controller\DataController:actionRealaqiGet')
+    ->name('load-realtimeaqidata');
+
+$app->get('/aboutus', 'Sample\Controller\IndexController:actionAboutusPage')
+    ->name('load-aboutuspage');
 
 $app->group('/v1', function () use ($app) {
     // get programmers list, GET /v1/programmers

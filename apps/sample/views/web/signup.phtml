@@ -80,7 +80,7 @@
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
-                                                <input type="date" class="form-control pull-right" id="inputbirth">
+                                                <input type="date" class="form-control pull-right" id="inputbirth" value="1980-01-01">
                                             </div>
                                         </div>
                                     </div>
@@ -127,7 +127,7 @@
                                         }
 
                                         if(charcount<2 || numcount<1) {
-                                            alert("You must contain two characters at least and a number");
+                                            alert("You must contain at least two characters and a number");
                                             return false;
                                         }
 
@@ -162,7 +162,7 @@
 
                                                 var res = JSON.parse(response);
 
-                                                if (res['status'] == true) {
+                                                if (res['status'] === true) {
                                                     window.location = '/successmessage';
                                                 }
                                                 else

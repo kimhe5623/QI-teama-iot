@@ -100,25 +100,32 @@ class IndexController extends Controller
         $this->render("web/chkemail.phtml");
     }
 
-    public function actionHeartratePage()
+    public function actionRealtimeHeartratePage()
     {
         $this->getApp()->contentType('text/html');
 
-        $this->render("web/heartrate.phtml");
+        $this->render("web/realtimeheartrate.phtml");
     }
 
-    public function actionRRratePage()
+    public function actionRealtimeAQIDataPage()
     {
         $this->getApp()->contentType('text/html');
 
-        $this->render("web/rrrate.phtml");
+        $this->render("web/realtimeaqi.phtml");
     }
 
-    public function actionAQIDataPage()
+    public function actionHistoricalHeartratePage()
     {
         $this->getApp()->contentType('text/html');
 
-        $this->render("web/aqi.phtml");
+        $this->render("web/historicalheartrate.phtml");
+    }
+
+    public function actionHistoricalAQIDataPage()
+    {
+        $this->getApp()->contentType('text/html');
+
+        $this->render("web/historicalaqi.phtml");
     }
 
     public function actionChkpwdprofilePage()
@@ -126,5 +133,12 @@ class IndexController extends Controller
         $this->getApp()->contentType('text/html');
 
         $this->render("web/chkpwdprofile.phtml");
+    }
+
+    public function actionAboutusPage()
+    {
+        $this->getApp()->contentType('text/html');
+
+        $this->render("web/aboutus.phtml");
     }
 }

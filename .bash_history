@@ -1,26 +1,3 @@
-ls
-ls -lt
-pwd
-cd /tmp
-ls -lt
-du
-df
-cd /var/www/teama-iot
-tar -czf /tmp/2017summer_teama.tgz .
-mysqldump -uroot -p teama-iot > mysqldump_official.sql
-mysqldump -uteama-iot -p teama-iot > mysqldump_official.sql
-mysqldump -uteama-iot -p teama-iot > mysqldump_official.sql
-ls
-less index.php 
-less sign_up.php 
-less sign_up.php 
-less signup_confirmation/connection/connect.php 
-pwd
-mysqldump -uteama-iot -p teama2017 > mysqldump_official.sql
-tar -czf /tmp/teama2017summer.tgz .
-ls -lt /tmp
-pwd
-ls -lt
 rm -rf *
 ls
 passwd
@@ -430,3 +407,94 @@ git add -A
 git commit -m "fourth"
 git push origin master
 mysql -r -p
+ls
+git status
+git add -A
+git commit -m "fifth"
+git status
+git push ella master
+git status
+ls
+git add -A
+git status
+git commit -m "hello"
+mysql -r -p
+mysql -r -p
+mysql -r -p
+ls
+/var/www/
+cd /var/www
+ls
+cd /etc/
+ls
+ls p
+ll
+cat php
+cat php.ini
+cat php5.ini
+cat php5
+ls -lt
+cd
+ls
+cd /etc/php5/
+ls
+ls
+cd public
+ls
+cd sample
+ls
+cd images
+ls
+ls
+exit
+mysql -r -p
+exit
+ls
+cd apps/sample/
+ls
+cd views/web/
+ls
+cat realtime
+cate realtime.phtml
+cat realtime.phtml
+mysql -r -p
+exit
+mysql -r -p
+mysql -r -p
+exit
+mysql -r -p
+mysql -r -p
+mysql -r -p
+Apple543@
+mysql -r -p
+mysql -r -p
+mysql -r -p
+mysql -r -p
+mysql -r -p
+ls
+cd apps
+ls
+cd sample
+ls
+cd controllers
+ls
+vi DataController.php 
+vi ../routers/aqi
+ls
+cd ..
+cd routers
+ls
+vi v1.get.router.php 
+vi v1.post.router.php 
+vi ../controllers/DataController.php 
+cd ..
+vi models/DataModel.php 
+mysql -r -p
+exit
+mysql -r -p
+mysql -r -p
+exit
+mysql -r -p
+exit
+mysql -r -p
+exit

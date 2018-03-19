@@ -20,7 +20,7 @@ class UserController extends Controller
             echo json_encode(array('status' => true, 'message' => 'Success'));
             return;
         }
-        echo json_encode(array('status' => true, 'message' => 'fail'));
+        echo json_encode(array('status' => false, 'message' => 'fail'));
         return;
     }
 
@@ -117,10 +117,9 @@ class UserController extends Controller
 
         $dsn = $_SESSION['dsn'];
 
-        $user = (new UserGetModel())->getPassword($dsn, $userpassword);
+        $user = (new UserGetModel())->getPassword($dsn);
 
         $truefalse = password_verify($userpassword, $user[0]['Hashed_PW']);
-
 
         if ($truefalse) {
             $delete = (new UserUpdateModel())->deleteID($dsn);
@@ -147,7 +146,7 @@ class UserController extends Controller
 
         } else {
 
-            echo json_encode(array('status' => true, 'message' => 'Fail'));
+            echo json_encode(array('status' => false, 'message' => 'Fail'));
 
         }
     }
@@ -176,9 +175,9 @@ class UserController extends Controller
             $mail->SMTPAuth = true;
             $mail->Username = "teamaiot2017@gmail.com";
             $mail->Password = "chosun2018";
-            $mail->setFrom('teamaiot2017@gmail.com', 'M');
-            $mail->addReplyTo('teamaiot2017@gmail.com', 'M');
-            $mail->addAddress($bodyData->email, 'Test');
+            $mail->setFrom('teamaiot2017@gmail.com', 'My Doctor A');
+            $mail->addReplyTo('teamaiot2017@gmail.com', 'My Doctor A');
+            $mail->addAddress($bodyData->email, 'My Doctor A User');
             $mail->Subject = 'Verification Code';
             //$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
 
@@ -229,9 +228,9 @@ class UserController extends Controller
             $mail->SMTPAuth = true;
             $mail->Username = "teamaiot2017@gmail.com";
             $mail->Password = "chosun2018";
-            $mail->setFrom('teamaiot2017@gmail.com', 'M');
-            $mail->addReplyTo('teamaiot2017@gmail.com', 'M');
-            $mail->addAddress($bodyData->email, 'Test');
+            $mail->setFrom('teamaiot2017@gmail.com', 'My Doctor A');
+            $mail->addReplyTo('teamaiot2017@gmail.com', 'My Doctor A');
+            $mail->addAddress($bodyData->email, 'My Doctor A User');
             $mail->Subject = 'Verification Code';
             //$mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
 
@@ -305,7 +304,39 @@ class UserController extends Controller
         return;
     }
 
-    public function actionPatientPage()
+    public function actionRealtimePage()
+    {
+        $dsn = $_SESSION['dsn'];
+        //$dsn = 12;
+
+        $user = (new UserGetModel())->getPatientdata($dsn);
+
+        $count = count($user);
+
+        if($user) {
+            for($i=0;$i<$count;$i++) {
+                /*if($user[$i]["requestingUSN"] == $dsn) {
+                    $usn = $user[$i]["requestedUSN"];
+                }
+                else if($user[$i]["requestedUSN"] == $dsn) {
+                    $usn = $user[$i]["requestingUSN"];
+                }*/
+                $data[$i] = array('email' => $user[$i]["U_email"], 'fname' => $user[$i]["U_Fname"],
+                    'lname' => $user[$i]["U_Lname"], 'birth' => $user[$i]["U_Birth"], 'gender' => $user[$i]["U_Gender"], 'phone' => $user[$i]["U_Phone"], 'usn' => $user[$i]["USN"],
+                    'requestingUSN' => $user[$i]["requestingUSN"], 'requestedUSN' => $user[$i]["requestedUSN"], 'CONN_state' => $user[$i]["CONN_state"]);
+            }
+            $this->getApp()->contentType('text/html');
+            $this->render("web/realtime.phtml",$data);
+            return;
+        }
+
+        $this->getApp()->contentType('text/html');
+        $this->render("web/realtime.phtml");
+
+        return;
+    }
+
+    public function actionHistoricalPage()
     {
         $dsn = $_SESSION['dsn'];
 
@@ -320,12 +351,12 @@ class UserController extends Controller
                     'requestingUSN' => $user[$i]["requestingUSN"], 'requestedUSN' => $user[$i]["requestedUSN"], 'CONN_state' => $user[$i]["CONN_state"]);
             }
             $this->getApp()->contentType('text/html');
-            $this->render("web/patientlist.phtml",$data);
+            $this->render("web/historical.phtml",$data);
             return;
         }
 
         $this->getApp()->contentType('text/html');
-        $this->render("web/patientlist.phtml");
+        $this->render("web/historical.phtml");
 
         return;
     }
@@ -363,7 +394,7 @@ class UserController extends Controller
             return;
         }
 
-        echo json_encode(array('status' => true, 'message' => 'fail'));
+        echo json_encode(array('status' => false, 'message' => 'There is no User'));
         return;
     }
 
@@ -382,7 +413,26 @@ class UserController extends Controller
 
         $dsn = $_SESSION['dsn'];
 
-        $user = (new UserUpdateModel())->updateConnectRequest($bodyData->usn, $dsn);
+        $chk = (new UserGetModel())->chkConnection($bodyData->usn, $dsn);
+
+        if(!$chk) {
+            $trufalse = (new UserUpdateModel())->updateConnectRequest($bodyData->usn, $dsn);
+            if($trufalse) {
+                echo json_encode(array('status' => true, 'message' => 'Success'));
+                return;
+            }
+            echo json_encode(array('status' => false, 'message' => 'fail'));
+            return;
+        }
+        echo json_encode(array('status' => false, 'message' => 'Already Connected'));
+        return;
+    }
+
+    public function actionDisconnectuser()
+    {
+        $bodyData = json_decode($this->getApp()->request->getBody());
+
+        $user = (new UserUpdateModel())->updateDisconnect($bodyData->usn, $bodyData->dsn);
 
         echo json_encode(array('status' => true, 'message' => 'Success'));
     }

@@ -8,14 +8,9 @@ class UserModel extends Model
 {
     public function insertDoctor($data) {
 
-        //$sql = "INSERT into DOCTORS ('Doctor_email', 'Hashed_PW', 'Fname', 'Lname', 'Gender', 'Birth', 'Phone') VALUES (?, ?, ?, ?, ?, ?, ?)";
         $sql = "INSERT into USERS (User_email, Hashed_PW, Fname, Lname, Gender, Birth, Phone, Who) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         $hashed = password_hash($data->pwd, PASSWORD_DEFAULT);
-
-        //var_dump($email, $hashed, $birth, $gender, $fname, $lname, $phone);
-        //var_dump($target);
-        //exit;
 
         $sth = $this->getReadConnection()->prepare($sql);
         $sth->execute(array(strval($data->email), strval($hashed), strval($data->fname), strval($data->lname), intval($data->gender), strval($data->birth),

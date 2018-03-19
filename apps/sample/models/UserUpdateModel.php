@@ -70,6 +70,16 @@ class UserUpdateModel extends Model
         return $this->getReadConnection()->lastInsertId();
     }
 
+    public function updateConnectbyUser($usn, $dsn) {
+
+        $sql = "UPDATE CONN_and_req_info SET CONN_state = 1 WHERE requestingUSN = ? AND requestedUSN = ?";
+
+        $sth = $this->getReadConnection()->prepare($sql);
+        $sth->execute(array(intval($dsn),intval($usn)));
+
+        return $this->getReadConnection()->lastInsertId();
+    }
+
     public function updateConnectRequest($usn, $dsn) {
 
         $sql = "INSERT into CONNECTION_U_and_D (requestingUSN, requestedUSN, Reg_date, CONN_State) VALUES (?, ?, ?, 0)";
@@ -79,4 +89,25 @@ class UserUpdateModel extends Model
 
         return $this->getReadConnection()->lastInsertId();
     }
+
+    public function updateConnectRequestbyuser($usn, $dsn) {
+
+        $sql = "INSERT into CONNECTION_U_and_D (requestingUSN, requestedUSN, Reg_date, CONN_State) VALUES (?, ?, ?, 0)";
+
+        $sth = $this->getReadConnection()->prepare($sql);
+        $sth->execute(array(intval($usn),intval($dsn),date("Y-m-d H:i:s")));
+
+        return $this->getReadConnection()->lastInsertId();
+    }
+
+    public function updateDisconnect($usn, $dsn) {
+
+        $sql = "DELETE FROM CONNECTION_U_and_D WHERE (requestingUSN = ? AND requestedUSN = ?) OR (requestedUSN = ? AND requestingUSN = ?)";
+
+        $sth = $this->getReadConnection()->prepare($sql);
+        $sth->execute(array(intval($usn),intval($dsn),intval($usn),intval($dsn)));
+
+        return $this->getReadConnection()->lastInsertId();
+    }
+
 }

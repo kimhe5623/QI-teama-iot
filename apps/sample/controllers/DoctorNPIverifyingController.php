@@ -36,12 +36,12 @@ class DoctorNPIverifyingController extends Controller
                 return;
             }
             else {
-                echo json_encode(array('status' => true, 'message' => 'License already exists'));
+                echo json_encode(array('status' => false, 'message' => 'License already exists'));
                 return;
             }
         }
         else {
-            echo json_encode(array('status' => true, 'message' => 'Incorrect License information'));
+            echo json_encode(array('status' => false, 'message' => 'Incorrect License information'));
             return;
         }
 

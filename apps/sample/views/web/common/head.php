@@ -84,4 +84,7 @@
     <script src="../amcharts/amcharts.js" type="text/javascript"></script>
     <script src="../amcharts/serial.js" type="text/javascript"></script>
 
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
+
 </head>

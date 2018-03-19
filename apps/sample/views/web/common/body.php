@@ -18,15 +18,21 @@
                     </a>
                 </li>
                 <li>
-                    <a href="notifications.html">
+                    <a href="/aboutus">
                         <i class="pe-7s-bell"></i>
                         <p>About us</p>
                     </a>
                 </li>
                 <li>
-                    <a href="#" onclick="Patientpage()">
-                        <i class="pe-7s-user"></i>
-                        <p>Patient List</p>
+                    <a href="#" onclick="RealtimePatientpage()">
+                        <i class="pe-7s-display1"></i>
+                        <p>Real-time Patient</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="HistoricalPatientpage()">
+                        <i class="pe-7s-note2"></i>
+                        <p>Historical Patient</p>
                     </a>
                 </li>
             </ul>
@@ -123,12 +129,20 @@
                         <?php } ?>
                     </script>
                     <script>
-                        function Patientpage() {
+                        function RealtimePatientpage() {
                             if("<?echo $_SESSION['status'] ?>" == "not sign-in") {
                                 alert("You need to sign in");
                             }
                             else {
-                                window.location="/patientlist";
+                                window.location="/realtime";
+                            }
+                        }
+                        function HistoricalPatientpage() {
+                            if("<?echo $_SESSION['status'] ?>" == "not sign-in") {
+                                alert("You need to sign in");
+                            }
+                            else {
+                                window.location="/historical";
                             }
                         }
                     </script>

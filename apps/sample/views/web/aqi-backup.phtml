@@ -199,11 +199,11 @@
                             <div>
                                 <div class="form-group">
                                     <div class="col-sm-2">
-                                        <input type="date" id="fdate" class="form-control" maxlength="10">
+                                        <input type="date" id="fdate" class="form-control" value="<? echo date('Y-m-d', strtotime(date('Y-m-d').'-1 days'));?>" maxlength="10">
                                     </div>
                                     <div class="col-sm-1" style="width:40px;margin-top:5px">~</div>
                                     <div class="col-sm-2">
-                                        <input type="date" id="ldate" class="form-control" maxlength="10">
+                                        <input type="date" id="ldate" class="form-control" value="<? echo date('Y-m-d', strtotime(date('Y-m-d').'-1 days'));?>" maxlength="10">
                                     </div>
                                     <div class="col-sm-2" style="padding-top: 4px;">
                                         <input type="button" id="rrsearch" value="search" class="btn" onclick="generateChartData()">
@@ -248,14 +248,193 @@
 
 
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js"></script>
+
     <script>
         var arr;
         var count;
         var markerArray = [];
         var circles = [];
         var markers = [];
+        var Timer;
+
+        $().ready(function(){
+            // Create a map object and specify the DOM element for display.
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 32.8793991, lng: -117.2368268},
+                zoom: 8
+            });
+
+        Timer = setInterval(function () {
+
+            var chartData = [];
+            $.ajax({
+                type: "POST",
+                url: "/realtimeaqi",
+
+                success: function (response) {
+
+                    var res = JSON.parse(response);
+
+                    if (res['status'] == true) {
+                        arr = res['data'];
+                        count = arr.length;
+
+                        for (var i = count-1; i >=0; i--) {
+                            var ts = arr[i]['TS'].split(" ");
+                            var ymd = ts[0].split("-");
+                            var hm = ts[1].split(":");
+                            var middle = ymd[1] - 1;
+                            var pm25 = Math.round(arr[i]['PM2.5']);
+                            var o3 = Math.round(arr[i]['O3']);
+                            var no2 = Math.round(arr[i]['NO2']);
+                            var co = Math.round(arr[i]['CO']);
+                            var so2 = Math.round(arr[i]['SO2']);
+                            var tem = Math.round(arr[i]['Temperature']);
+
+                            var newDate = new Date(ymd[0], middle, ymd[2], hm[0], hm[1], hm[2]);
+
+                            chartData.push({
+                                date: newDate,
+                                pm25: pm25,
+                                o3: o3,
+                                no2: no2,
+                                co: co,
+                                so2: so2,
+                                tem: tem
+                            });
+                        }
+
+                        var chart = AmCharts.makeChart("chartdiv", {
+                            type: "serial",
+                            legend: {
+                                equalWidths: false,
+                                useGraphSettings: true,
+                                valueAlign: "left",
+                                valueWidth: 20
+                            },
+                            dataProvider: chartData,
+                            dataDateFormat: "YY-MM-DD JJ:NN:SS",
+                            categoryField: "date",
+                            categoryAxis: {
+                                minPeriod: "ss",
+                                parseDates: true,
+                                gridAlpha: 0.15,
+                                minorGridEnabled: true,
+                                axisColor: "#DADADA",
+                                title: "Date"
+                            },
+                            valueAxes: [{
+                                axisAlpha: 0.2,
+                                id: "v1",
+                                title: "AQI"
+                            },{
+                                axisAlpha: 0.2,
+                                position: "right",
+                                id: "v2",
+                                title: "Temperature"
+                            }],
+                            graphs: [{
+                                title: "PM2.5",
+                                id: "g1",
+                                valueAxis: "v1",
+                                valueField: "pm25",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 1,
+                                lineColor: "#93DAFF",
+                                negativeLineColor: "#0352b5",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>PM2.5: [[value]]</span></b>"
+                            },{
+                                title: "O3",
+                                id: "g2",
+                                valueField: "o3",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 1,
+                                lineColor: "#FFDC3C",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>O3: [[value]]</span></b>"
+                            },{
+                                title: "NO2",
+                                id: "g3",
+                                valueField: "no2",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 1,
+                                lineColor: "#FFB6C1",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>NO2: [[value]]</span></b>"
+                            },{
+                                title: "CO",
+                                id: "g4",
+                                valueField: "co",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 1,
+                                lineColor: "#3DFF92",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>CO: [[value]]</span></b>"
+                            },{
+                                title: "SO2",
+                                id: "g5",
+                                valueField: "so2",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 1,
+                                lineColor: "#D36EEC",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>SO2: [[value]]</span></b>"
+                            },{
+                                title: "Temperature",
+                                id: "g6",
+                                valueAxis: "v2",
+                                valueField: "tem",
+                                bullet: "round",
+                                bulletBorderColor: "#FFFFFF",
+                                bulletBorderAlpha: 1,
+                                lineThickness: 1,
+                                lineColor: "#b50088",
+                                negativeLineColor: "#b5030d",
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>Temperature: [[value]]℃</span></b>"
+                            }],
+                            chartCursor: {
+                                fullWidth: true,
+                                categoryBalloonDateFormat: "YY-MM-DD JJ:NN",
+                                valueLineBalloonEnabled: true,
+                                cursorAlpha: 0.1
+                            },
+                            chartScrollbar: {
+                                scrollbarHeight: 40,
+                                color: "#FFFFFF",
+                                autoGridCount: true
+                            },
+
+                            mouseWheelZoomEnabled: true
+                        });
+
+                        chart.addListener("dataUpdated", zoomChart);
+
+                        function zoomChart() {
+                            // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
+                            chart.zoomToIndexes(chartData.length - 40, chartData.length - 1);
+                        }
+                        initMap();
+                        google.maps.event.addDomListener(window, 'load', initMap);
+                    }
+                }
+            });
+        }, 5000);
+        });
+    </script>
+    <script>
         function generateChartData() {
+            clearInterval(Timer);
             var chartData = [];
             var date = {
                 fdate : $("#fdate").val(),
@@ -286,7 +465,7 @@
                             var so2 = Math.round(arr[i]['SO2']);
                             var tem = Math.round(arr[i]['Temperature']);
 
-                            var newDate = new Date(ymd[0], middle, ymd[2], hm[0], hm[1]);
+                            var newDate = new Date(ymd[0], middle, ymd[2], hm[0], hm[1], hm[2]);
 
                             chartData.push({
                                 date: newDate,
@@ -305,25 +484,28 @@
                                 equalWidths: false,
                                 useGraphSettings: true,
                                 valueAlign: "left",
-                                valueWidth: 120
+                                valueWidth: 20
                             },
                             dataProvider: chartData,
-                            dataDateFormat: "YY-MM-DD JJ:NN",
+                            dataDateFormat: "YY-MM-DD JJ:NN:SS",
                             categoryField: "date",
                             categoryAxis: {
-                                minPeriod: "mm",
+                                minPeriod: "ss",
                                 parseDates: true,
                                 gridAlpha: 0.15,
                                 minorGridEnabled: true,
-                                axisColor: "#DADADA"
+                                axisColor: "#DADADA",
+                                title: "Date"
                             },
                             valueAxes: [{
                                 axisAlpha: 0.2,
-                                id: "v1"
+                                id: "v1",
+                                title: "AQI"
                             },{
                                 axisAlpha: 0.2,
-                                offset: 50,
-                                id: "v2"
+                                position: "right",
+                                id: "v2",
+                                title: "Temperature"
                             }],
                             graphs: [{
                                 title: "PM2.5",
@@ -333,56 +515,52 @@
                                 bullet: "round",
                                 bulletBorderColor: "#FFFFFF",
                                 bulletBorderAlpha: 1,
-                                lineThickness: 2,
-                                lineColor: "#b5030d",
+                                lineThickness: 1,
+                                lineColor: "#93DAFF",
                                 negativeLineColor: "#0352b5",
                                 balloonText: "[[category]]<br><b><span style='font-size:14px;'>PM2.5: [[value]]</span></b>"
                             },{
                                 title: "O3",
                                 id: "g2",
-                                valueAxis: "v1",
                                 valueField: "o3",
                                 bullet: "round",
                                 bulletBorderColor: "#FFFFFF",
                                 bulletBorderAlpha: 1,
-                                lineThickness: 2,
-                                lineColor: "#0352b5",
+                                lineThickness: 1,
+                                lineColor: "#FFDC3C",
                                 negativeLineColor: "#b5030d",
                                 balloonText: "[[category]]<br><b><span style='font-size:14px;'>O3: [[value]]</span></b>"
                             },{
                                 title: "NO2",
                                 id: "g3",
-                                valueAxis: "v1",
                                 valueField: "no2",
                                 bullet: "round",
                                 bulletBorderColor: "#FFFFFF",
                                 bulletBorderAlpha: 1,
-                                lineThickness: 2,
-                                lineColor: "#b57300",
+                                lineThickness: 1,
+                                lineColor: "#FFB6C1",
                                 negativeLineColor: "#b5030d",
                                 balloonText: "[[category]]<br><b><span style='font-size:14px;'>NO2: [[value]]</span></b>"
                             },{
                                 title: "CO",
                                 id: "g4",
-                                valueAxis: "v1",
                                 valueField: "co",
                                 bullet: "round",
                                 bulletBorderColor: "#FFFFFF",
                                 bulletBorderAlpha: 1,
-                                lineThickness: 2,
-                                lineColor: "#b5b42b",
+                                lineThickness: 1,
+                                lineColor: "#3DFF92",
                                 negativeLineColor: "#b5030d",
                                 balloonText: "[[category]]<br><b><span style='font-size:14px;'>CO: [[value]]</span></b>"
                             },{
                                 title: "SO2",
                                 id: "g5",
-                                valueAxis: "v1",
                                 valueField: "so2",
                                 bullet: "round",
                                 bulletBorderColor: "#FFFFFF",
                                 bulletBorderAlpha: 1,
-                                lineThickness: 2,
-                                lineColor: "#2cb500",
+                                lineThickness: 1,
+                                lineColor: "#D36EEC",
                                 negativeLineColor: "#b5030d",
                                 balloonText: "[[category]]<br><b><span style='font-size:14px;'>SO2: [[value]]</span></b>"
                             },{
@@ -393,10 +571,10 @@
                                 bullet: "round",
                                 bulletBorderColor: "#FFFFFF",
                                 bulletBorderAlpha: 1,
-                                lineThickness: 2,
-                                lineColor: "#b50088",
+                                lineThickness: 1,
+                                lineColor: "#FF6464",
                                 negativeLineColor: "#b5030d",
-                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>Temperature: [[value]]</span></b>"
+                                balloonText: "[[category]]<br><b><span style='font-size:14px;'>Temperature: [[value]]℃</span></b>"
                             }],
                             chartCursor: {
                                 fullWidth: true,
@@ -407,8 +585,7 @@
                             chartScrollbar: {
                                 scrollbarHeight: 40,
                                 color: "#FFFFFF",
-                                autoGridCount: true,
-                                graph: "g1"
+                                autoGridCount: true
                             },
 
                             mouseWheelZoomEnabled: true
@@ -433,7 +610,7 @@
             iterator = 0;
             deleteMarkers();
             var mapOptions = {
-                zoom : 11,
+                zoom : 18,
                 center : new google.maps.LatLng(arr[count-1]['LAT'],arr[count-1]['LNG'])
             };
 
@@ -443,8 +620,8 @@
                 markerArray[i] = new google.maps.LatLng(arr[i]['LAT'],arr[i]['LNG']);
                 addMarker(map);
             }
-            var markerCluster = new MarkerClusterer(map, markers,
-                {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+            /*var markerCluster = new MarkerClusterer(map, markers,
+                {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});*/
         }
 
         function addMarker(map) {
@@ -454,6 +631,7 @@
             var co = Math.round(arr[iterator]['CO']);
             var so2 = Math.round(arr[iterator]['SO2']);
             var tem = Math.round(arr[iterator]['Temperature']);
+            var aqiarr = [pm25, o3, no2, co, so2];
 
             var str = arr[iterator]['TS'] + " PM2.5 : " + pm25 + ", O3 : " + o3 + ", NO2 : " + no2 + ", CO : " + co + ", SO2 : " + so2 + ", Tem : " + tem;
 
@@ -464,15 +642,38 @@
                 draggable: false
             });
 
+            for(var i=0; i<4; i++) {
+                if(aqiarr[i] >= aqiarr[i+1]) {
+                    aqiarr[i+1] = aqiarr[i];
+                }
+            }
+
+            var max = aqiarr[4];
+            var Bcolor;
+
+            if(max >= 0 && max <= 50) {
+                BColor = "#00E400";
+            } else if(max >= 51 && max <=100) {
+                BColor = "#FFFF00";
+            } else if(max >= 101 && max <=150) {
+                BColor = "#FF7E00";
+            } else if(max >= 151 && max <=200) {
+                BColor = "#FF0000";
+            } else if(max >= 201 && max <=300) {
+                BColor = "#8F3F97";
+            } else if(max >= 301 && max <=500) {
+                BColor = "#7E0023";
+            }
+
             var Circle = new google.maps.Circle({
                 strokeColor: '#CCCCCC',
                 strokeOpacity: 0.8,
                 strokeWeight: 1,
-                fillColor: '#0000FF',
-                fillOpacity: 0.2,
+                fillColor: BColor,
+                fillOpacity: 0.5,
                 map: map,
                 center: markerArray[iterator],
-                radius: 300
+                radius: 50
             });
             Circle.setMap(map);
             
@@ -516,15 +717,5 @@
         }
 
 
-    </script>
-
-    <script>
-        $().ready(function(){
-            // Create a map object and specify the DOM element for display.
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 32.8793991, lng: -117.2368268},
-                zoom: 8
-            });
-        });
     </script>
 </html>

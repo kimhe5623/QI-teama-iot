@@ -6,7 +6,7 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="header">
-                            <h4 class="title">Change Password</h4>
+                            <h4 class="title">New Password</h4>
                         </div>
                         <div class="content">
                             <form id="fchangepwd-form" method="post" class="form-group">
@@ -72,8 +72,10 @@
                                                     alert("Password change is successful");
                                                     window.location = '/';
                                                 }
-                                                else
+                                                else {
                                                     alert(res['message']);
+                                                    return false;
+                                                }
                                             }
                                         });
 

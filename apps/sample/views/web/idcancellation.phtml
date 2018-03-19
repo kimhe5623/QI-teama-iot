@@ -23,29 +23,32 @@
 
                                 <script type="text/javascript">
                                     $("#idcancellation-form").submit(function(){
+                                        var truefalse = confirm("Are you sure to cancel your ID?");
+                                        if(truefalse) {
+                                            var data = {
+                                                pwd : $("#chkidpwd").val()
+                                            };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/idcancellation",
+                                                data: JSON.stringify(data),
+                                                success: function (response) {
 
-                                        var data = {
-                                            pwd : $("#chkidpwd").val()
-                                        };
-                                        $.ajax({
-                                            type: "POST",
-                                            url: "/idcancellation",
-                                            data: JSON.stringify(data),
-                                            success: function (response) {
+                                                    var res = JSON.parse(response);
 
-                                                var res = JSON.parse(response);
-
-                                                if (res['status'] == true) {
-                                                    alert("Account is successfully deleted");
-                                                    window.location = '/';
+                                                    if (res['status'] == true) {
+                                                        alert("Account is successfully deleted");
+                                                        window.location = '/';
+                                                    }
+                                                    else {
+                                                        alert(res['message']);
+                                                        window.location = '/idcancellation';
+                                                        //return false;
+                                                    }
                                                 }
-                                                else
-                                                    alert(res['message']);
-                                            }
-                                        });
-
+                                            });
+                                        }
                                         return false;
-
                                     });
                                 </script>
                             </form>
@@ -83,16 +86,6 @@
 <script src="plugins/iCheck/icheck.min.js"></script>
 <!-- FastClick -->
 <script src="bower_components/fastclick/lib/fastclick.js"></script>
-
-<script>
-    $(function () {
-        //Date picker
-        $('#datepicker').datepicker({
-            autoclose: true
-        })
-    })
-</script>
-
 
 </body>
 
