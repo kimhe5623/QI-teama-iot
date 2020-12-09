@@ -19,21 +19,21 @@ This is a project about Healthcare Application
 
 ### User management
 
-![image](https://user-images.githubusercontent.com/32252093/101587417-84bc4a80-3a27-11eb-93da-157d2bd7de02.png)
-![image](https://user-images.githubusercontent.com/32252093/101587505-afa69e80-3a27-11eb-965b-51969dfcc817.png)
+![image](https://user-images.githubusercontent.com/32252093/101588411-b1716180-3a29-11eb-90e2-5861f21a7d55.png)
+![image](https://user-images.githubusercontent.com/32252093/101588466-d49c1100-3a29-11eb-8f06-8d9513a5fb7e.png)
+
 
 ### Data monitoring
 
-![image](https://user-images.githubusercontent.com/32252093/101587794-483d1e80-3a28-11eb-8f1b-6a27516ccd14.png)
-![image](https://user-images.githubusercontent.com/32252093/101587873-6f93eb80-3a28-11eb-87b1-1556fe06fe0f.png)
+![image](https://user-images.githubusercontent.com/32252093/101588506-ebdafe80-3a29-11eb-9e49-7a176313c31a.png)
+
 
 ## Web Application
 
 ### User management
-![image](https://user-images.githubusercontent.com/32252093/101587924-918d6e00-3a28-11eb-9736-c8c7746e9552.png)
-![image](https://user-images.githubusercontent.com/32252093/101587947-9b16d600-3a28-11eb-825f-31872f4d06d0.png)
-![image](https://user-images.githubusercontent.com/32252093/101587959-a5d16b00-3a28-11eb-9c79-54f5c0697de3.png)
-![image](https://user-images.githubusercontent.com/32252093/101587970-ac5fe280-3a28-11eb-9efa-6ae59dfaf85f.png)
+![image](https://user-images.githubusercontent.com/32252093/101588598-188f1600-3a2a-11eb-8034-3cc1563ff893.png)
+
 
 ### Data monitoring
-![image](https://user-images.githubusercontent.com/32252093/101588072-e4ffbc00-3a28-11eb-95a1-b5d3bbc47c79.png)
+![image](https://user-images.githubusercontent.com/32252093/101588627-293f8c00-3a2a-11eb-94d6-9a6c2b0cb840.png)
+
