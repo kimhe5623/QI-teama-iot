@@ -1,3 +1,15 @@
+# Table of Contents
+[My Doctor A](#mydoctora)
+1. [Reference Model](#reference-model)
+2. [Android Application](#android-app)
+     - [User Managemrnt](#android-um)
+     - [Data Monitoring](#android-dm)
+3. [Web Application](#web-app)
+     - [User Management](#web-um)
+     - [Data Monitoring](#web-dm)
+
+<a name="mydoctora"/>
+
 # My Doctor A #
 This is a project about Healthcare Application
 
@@ -10,14 +22,6 @@ This is a project about Healthcare Application
  
  - Make people find the air pollution degree easily anywhere using their sensor
 
-# Table of Contents
-1. [Reference Model](#reference-model)
-2. [Android Application](#android-app)
-   2.1. [User Managemrnt](#android-um)
-   2.2. [Data Monitoring](#android-dm)
-3. [Web Application](#web-app)
-   3.1. [User Management](#web-um)
-   3.2. [Data Monitoring](#web-dm)
 
 <a name="reference-model"/>
 
