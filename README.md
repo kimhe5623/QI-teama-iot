@@ -6,10 +6,11 @@
      - [User Management](#user-management)
      - [Data Management](#data-management)
      - [Data Monitoring](#data-monitoring)
-3. [Android Application](#android-app)
+4. [Flowchart/Block diagram](#system-diagram)
+5. [Execution result: Android Application](#android-app)
      - [User Managemrnt](#android-um)
      - [Data Monitoring](#android-dm)
-4. [Web Application](#web-app)
+6. [Execution result: Web Application](#web-app)
      - [User Management](#web-um)
      - [Data Monitoring](#web-dm)
 
@@ -64,7 +65,7 @@ This is a project about Healthcare Application
 -	Historical air quality data transfer
 -	Historical heart-related data transfer
 
-<a name="data-monitoring/>
+<a name="data-monitoring"/>
 
 ### - Data Monitoring
 
@@ -74,11 +75,15 @@ This is a project about Healthcare Application
 -	Display of my historical heart-related data
 -	Display of historical and real-time patient data
 
-<a name="android-app"/>
+<a name="system-diagram"/>
 
 ## 4. Flowchart/Block Diagram
 
-## 3. Android Application
+- <a href="https://github.com/kimhe5623/QI-teama-iot/blob/master/My%20Doctor%20A%20-%20flowchart.pdf"><u>Direct Link 🔗</u></a>
+
+<a name="android-app"/>
+
+## 5. Execution result: Android Application
 
 <a name="android-um"/>
 
@@ -95,7 +100,7 @@ This is a project about Healthcare Application
 
 <a name="web-app"/>
 
-## 4. Web Application
+## 6. Execution result: Web Application
 
 <a name="web-um"/>
 
