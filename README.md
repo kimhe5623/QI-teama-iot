@@ -2,6 +2,10 @@
 [My Doctor A](#mydoctora)
 1. [Reference Model](#reference-model)
 2. [System Architecture](#system-architecture)
+3. [Function List](#function-list)
+     - [User Management](#user-management)
+     - [Data Management](#data-management)
+     - [Data Monitoring](#data-monitoring)
 3. [Android Application](#android-app)
      - [User Managemrnt](#android-um)
      - [Data Monitoring](#android-dm)
@@ -36,8 +40,43 @@ This is a project about Healthcare Application
 
 ![image](https://user-images.githubusercontent.com/32252093/101592460-a3274380-3a31-11eb-9f30-d40572f84e38.png)
 
+<a name="function-list"/>
+
+## 3. Function List
+
+<a name="user-management"/>
+
+### - User Management
+
+- User and Doctor Sign-Up
+- Sign-In/Out and delete account
+- User’s information update
+- User’s password change
+- Forgotten password update
+- Connection system between doctor and patient
+
+<a name="data-management"/>
+
+### - Data Management
+
+-	Real-time air quality data transfer 
+-	Real-time heart-related data transfer
+-	Historical air quality data transfer
+-	Historical heart-related data transfer
+
+<a name="data-monitoring/>
+
+### - Data Monitoring
+
+-	Display of my real-time my air quality data
+-	Display of my real-time heart-related data
+-	Display of my historical air quality data
+-	Display of my historical heart-related data
+-	Display of historical and real-time patient data
 
 <a name="android-app"/>
+
+## 4. Flowchart/Block Diagram
 
 ## 3. Android Application
 
