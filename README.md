@@ -79,7 +79,7 @@ This is a project about Healthcare Application
 
 ## 4. Flowchart/Block Diagram
 
-- <a href="https://github.com/kimhe5623/QI-teama-iot/blob/master/My%20Doctor%20A%20-%20flowchart.pdf"><u>Direct Link 🔗</u></a>
+- <a href="https://github.com/kimhe5623/QI-teama-iot/blob/master/My%20Doctor%20A%20-%20flowchart.pdf" target="_blank"><u>Direct Link 🔗</u></a>
 
 <a name="android-app"/>
 
